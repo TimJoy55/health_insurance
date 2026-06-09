@@ -43,7 +43,7 @@ interface Policy {
   reasons?: string[];
 }
 
-type SheetFeature = string;
+type SheetFeature = { key: string; label: string };
 
 // --- DATA STRUCTURE ALIGNED TO SHEET AND DEEP RESEARCH PLAN ---
 const POLICIES = [
@@ -605,7 +605,7 @@ export default function Dashboard() {
                   <Activity className="h-4 w-4 text-emerald-500" /> Underwriting & Solvency Ratios
                 </h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {Object.entries(METRIC_DEFINITIONS).map(([key, item]) => (
+                  {Object.entries(METRIC_DEFINITIONS).map(([key, item]: [string, { title: string; desc: string }]) => (
                     <div key={key} className="bg-slate-900 p-3 rounded-lg border border-slate-800/80 hover:border-slate-700 transition">
                       <div className="text-[11px] font-semibold text-slate-400 uppercase mb-1 flex items-center justify-between">
                         {item.title.split(' ')[0]} 
@@ -736,13 +736,13 @@ export default function Dashboard() {
                       <th className="p-4 text-xs font-bold uppercase tracking-wider text-slate-400 w-1/4 border-r border-slate-800">
                         Feature / Category
                       </th>
-                      {comparedPlanIds.map(planId => {
+                      {comparedPlanIds.map((planId: string) => {
                         const plan = POLICIES.find(p => p.id === planId);
-                        const calculatedPrem = calculatePremium(plan.premiumBase[selectedProfile]);
+                        const calculatedPrem = calculatePremium(plan!.premiumBase[selectedProfile as keyof typeof plan.premiumBase]);
                         return (
                           <th key={planId} className="p-4 text-xs font-bold text-center w-1/4 border-r border-slate-800 last:border-r-0">
-                            <div className="text-white text-sm font-black mb-1">{plan.name}</div>
-                            <div className="text-[10px] text-slate-500 tracking-wide font-semibold">{plan.issuer}</div>
+                            <div className="text-white text-sm font-black mb-1">{plan!.name}</div>
+                            <div className="text-[10px] text-slate-500 tracking-wide font-semibold">{plan!.issuer}</div>
                             <div className="mt-2 text-emerald-400 text-sm font-extrabold">₹{calculatedPrem.toLocaleString('en-IN')}/yr</div>
                           </th>
                         );
