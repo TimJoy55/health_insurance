@@ -737,19 +737,6 @@ export default function App() {
                   </thead>
                   <tbody>
                     {SHEET_FEATURES.map((feature, featureIdx) => {
-                      // Category breaks styling
-                      const isCategoryHeader = feature.label.includes("Hospitalization benefits") || feature.label.includes("Maternity Benefits") || feature.label.includes("Renewal benefits");
-                      
-                      if (isCategoryHeader) {
-                        return (
-                          <tr key={feature.key} className="bg-slate-900/80 border-y border-slate-800">
-                            <td colSpan={comparedPlanIds.length + 1} className="p-3 text-[11px] font-extrabold text-emerald-400 uppercase tracking-widest pl-4">
-                              {feature.label}
-                            </td>
-                          </tr>
-                        );
-                      }
-
                       return (
                         <tr key={feature.key} className="border-b border-slate-800 hover:bg-slate-900/20 transition-all">
                           {/* Row Header */}
@@ -1060,7 +1047,7 @@ export default function App() {
                       <div className="flex flex-col items-center">
                         <div className="flex gap-1.5 h-32 items-end">
                           <div className="w-3 bg-emerald-500 rounded-t" style={{ height: '100%' }} title="HDFC: 30L"></div>
-                          <div className="w-3 bg-teal-500 rounded-t" style={{ height: '100%' }} style={{ height: '115px' }} title="Care: 40L"></div>
+                          <div className="w-3 bg-teal-500 rounded-t" style={{ height: '115px' }} title="Care: 40L"></div>
                           <div className="w-3 bg-sky-500 rounded-t" style={{ height: '66%' }} title="Tata AIG: 20L"></div>
                         </div>
                         <span className="text-[9px] text-slate-400 mt-1">Year 3</span>
@@ -1070,7 +1057,7 @@ export default function App() {
                       <div className="flex flex-col items-center">
                         <div className="flex gap-1.5 h-32 items-end">
                           <div className="w-3 bg-emerald-500 rounded-t" style={{ height: '100%' }} title="HDFC: 30L"></div>
-                          <div className="w-3 bg-teal-500 rounded-t" style={{ height: '100%' }} style={{ height: '128px' }} title="Care: 60L (Max Capped)"></div>
+                          <div className="w-3 bg-teal-500 rounded-t" style={{ height: '128px' }} title="Care: 60L (Max Capped)"></div>
                           <div className="w-3 bg-sky-500 rounded-t" style={{ height: '66%' }} title="Tata AIG: 20L"></div>
                         </div>
                         <span className="text-[9px] text-slate-400 mt-1">Year 4</span>
@@ -1370,7 +1357,6 @@ export default function App() {
                 
                 {SHEET_FEATURES.map((feature) => {
                   const val = selectedPlanDetail.features[feature.key];
-                  if (feature.label.includes("benefits") && !feature.label.includes("Hospital cash") && !feature.label.includes("Maternity") && !feature.label.includes("Renewal")) return null;
                   return (
                     <div key={feature.key} className="grid grid-cols-1 md:grid-cols-3 gap-2 py-1 border-b border-slate-850 last:border-0 text-xs">
                       <span className="font-bold text-slate-400 md:col-span-1">{feature.label}</span>
