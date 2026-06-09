@@ -320,7 +320,7 @@ export default function Dashboard() {
   });
 
   // --- COMPUTE PREMIUMS DYNAMICALLY ---
-  const calculatePremium = (basePrem) => {
+  const calculatePremium = (basePrem: number) => {
     let prem = basePrem;
     
     if (selectedSumInsured === "10") prem = basePrem * 0.85;
@@ -336,10 +336,10 @@ export default function Dashboard() {
   };
 
   // --- TOGGLE COMPARED PLANS ---
-  const toggleComparison = (id) => {
+  const toggleComparison = (id: string) => {
     if (comparedPlanIds.includes(id)) {
       if (comparedPlanIds.length > 1) {
-        setComparedPlanIds(comparedPlanIds.filter(pId => pId !== id));
+        setComparedPlanIds(comparedPlanIds.filter((pId: string) => pId !== id));
       }
     } else {
       if (comparedPlanIds.length < 3) {
