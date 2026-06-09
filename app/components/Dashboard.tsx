@@ -25,6 +25,26 @@ import {
   FileText
 } from 'lucide-react';
 
+// --- TYPE DEFINITIONS ---
+interface Policy {
+  id: string;
+  name: string;
+  issuer: string;
+  csr: string;
+  icr: string;
+  solvency: string;
+  complaints: string;
+  hospitals: string;
+  premiumBase: { individual: number; couple: number; family: number; senior: number };
+  pros: string[];
+  cons: string[];
+  features: Record<string, string>;
+  score?: number;
+  reasons?: string[];
+}
+
+type SheetFeature = string;
+
 // --- DATA STRUCTURE ALIGNED TO SHEET AND DEEP RESEARCH PLAN ---
 const POLICIES = [
   {
@@ -375,7 +395,7 @@ export default function Dashboard() {
   const recommendations = useMemo(() => {
     let list = [...POLICIES];
     
-    return list.map(plan => {
+    return list.map((plan: Policy) => {
       let score = 0;
       let reasons = [];
 
@@ -533,7 +553,7 @@ export default function Dashboard() {
                 <Shield className="h-3 w-3" /> Desired Sum Insured
               </label>
               <div className="grid grid-cols-4 gap-1 bg-slate-900 p-1 rounded-lg border border-slate-800">
-                {["10", "15", "25", "50"].map((si) => (
+                {["10", "15", "25", "50"].map((si: string) => (
                   <button
                     key={si}
                     onClick={() => setSelectedSumInsured(si)}
@@ -605,7 +625,7 @@ export default function Dashboard() {
                   </p>
                 </div>
                 <div className="flex gap-2 flex-wrap mt-3">
-                  {POLICIES.map(p => {
+                  {POLICIES.map((p: Policy) => {
                     const isSelected = comparedPlanIds.includes(p.id);
                     return (
                       <button 
@@ -624,7 +644,7 @@ export default function Dashboard() {
 
             {/* QUICK OVERVIEW PLAN CARDS */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-              {POLICIES.map((plan) => {
+              {POLICIES.map((plan: Policy) => {
                 const isCompared = comparedPlanIds.includes(plan.id);
                 const premium = calculatePremium(plan.premiumBase[selectedProfile]);
                 return (
@@ -670,7 +690,7 @@ export default function Dashboard() {
                       <div>
                         <h4 className="text-[10px] uppercase font-bold text-emerald-500 tracking-wider mb-1.5">Highlighted Advantages</h4>
                         <ul className="space-y-1">
-                          {plan.pros.map((pro, idx) => (
+                          {plan.pros.map((pro: string, idx: number) => (
                             <li key={idx} className="text-xs text-slate-300 flex items-start gap-1.5">
                               <Check className="h-3.5 w-3.5 text-emerald-500 shrink-0 mt-0.5" />
                               <span>{pro}</span>
@@ -730,7 +750,7 @@ export default function Dashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {SHEET_FEATURES.map((feature, featureIdx) => {
+                    {SHEET_FEATURES.map((feature: SheetFeature, featureIdx: number) => {
                       return (
                         <tr key={feature.key} className="border-b border-slate-800 hover:bg-slate-900/20 transition-all">
                           {/* Row Header */}
@@ -738,7 +758,7 @@ export default function Dashboard() {
                             {feature.label}
                           </td>
                           {/* Plan Values */}
-                          {comparedPlanIds.map(planId => {
+                          {comparedPlanIds.map((planId: string) => {
                             const plan = POLICIES.find(p => p.id === planId);
                             let value = plan.features[feature.key];
 
@@ -1183,7 +1203,7 @@ export default function Dashboard() {
                 <span className="text-xs text-slate-500">Sorted by actuary compatibility index</span>
               </div>
 
-              {recommendations.slice(0, 3).map((plan, idx) => {
+              {recommendations.slice(0, 3).map((plan: Policy, idx: number) => {
                 const calculatedPrem = calculatePremium(plan.premiumBase[selectedProfile]);
                 const scorePercentage = Math.min(100, Math.max(20, 60 + (plan.score * 8)));
                 
@@ -1217,7 +1237,7 @@ export default function Dashboard() {
                         <h5 className="text-[10px] uppercase font-bold text-emerald-500 tracking-wider mb-1.5">Why this fits your profile:</h5>
                         <ul className="space-y-1.5">
                           {plan.reasons.length > 0 ? (
-                            plan.reasons.map((reason, rIdx) => (
+                            plan.reasons!.map((reason: string, rIdx: number) => (
                               <li key={rIdx} className="text-xs text-slate-300 flex items-start gap-1.5">
                                 <Check className="h-3.5 w-3.5 text-emerald-500 shrink-0 mt-0.5" />
                                 <span>{reason}</span>
@@ -1347,7 +1367,7 @@ export default function Dashboard() {
                   Detailed Parameters Breakdowns (Google Sheet Mapping)
                 </h4>
                 
-                {SHEET_FEATURES.map((feature) => {
+                {SHEET_FEATURES.map((feature: SheetFeature) => {
                   const val = selectedPlanDetail.features[feature.key];
                   return (
                     <div key={feature.key} className="grid grid-cols-1 md:grid-cols-3 gap-2 py-1 border-b border-slate-850 last:border-0 text-xs">
