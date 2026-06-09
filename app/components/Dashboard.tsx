@@ -589,7 +589,7 @@ export default function Dashboard() {
                     <div key={key} className="bg-slate-900 p-3 rounded-lg border border-slate-800/80 hover:border-slate-700 transition">
                       <div className="text-[11px] font-semibold text-slate-400 uppercase mb-1 flex items-center justify-between">
                         {item.title.split(' ')[0]} 
-                        <HelpCircle className="h-3 w-3 text-slate-600 hover:text-slate-400 cursor-pointer" title={item.desc} />
+                        <span title={item.desc}><HelpCircle className="h-3 w-3 text-slate-600 hover:text-slate-400 cursor-pointer" /></span>
                       </div>
                       <p className="text-xs text-slate-500 leading-tight mt-1">{item.desc.substring(0, 52)}...</p>
                     </div>
