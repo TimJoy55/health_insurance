@@ -4,21 +4,21 @@ import {
   useState,
   useMemo,
 } from 'react';
-import { 
-  Shield, 
-  Layers, 
-  Sliders, 
-  HelpCircle, 
-  Sparkles, 
-  Info, 
-  Check, 
-  X, 
-  ChevronRight, 
-  DollarSign, 
-  Activity, 
-  Users, 
-  Heart, 
-  Plus, 
+import {
+  Shield,
+  Layers,
+  Sliders,
+  HelpCircle,
+  Sparkles,
+  Info,
+  Check,
+  X,
+  ChevronRight,
+  DollarSign,
+  Activity,
+  Users,
+  Heart,
+  Plus,
   AlertTriangle,
   RefreshCw,
   TrendingUp,
@@ -31,6 +31,7 @@ interface Policy {
   name: string;
   issuer: string;
   csr: string;
+  csr3yr: string;
   icr: string;
   solvency: string;
   complaints: string;
@@ -44,16 +45,18 @@ interface Policy {
 }
 
 type SheetFeature = { key: string; label: string };
+type Profile = keyof Policy['premiumBase'];
 
-// --- DATA STRUCTURE ALIGNED TO SHEET AND DEEP RESEARCH PLAN ---
-const POLICIES = [
+// --- DATA: IRDAI NL-37 / NL-45 / NL-26, Q4 FY2024-25 ---
+const POLICIES: Policy[] = [
   {
     id: "hdfc-optima",
     name: "HDFC ERGO Optima Secure",
     issuer: "HDFC ERGO General",
-    csr: "98.85%",
-    icr: "79.47%",
-    solvency: "2.00x",
+    csr: "97.45%",
+    csr3yr: "96.71%",
+    icr: "81.62%",
+    solvency: "1.99x",
     complaints: "9.28",
     hospitals: "15,000+",
     premiumBase: {
@@ -82,15 +85,16 @@ const POLICIES = [
       renewal: "Secure Benefit: 2X cover from Day 1. Plus Benefit: 50% increase in Yr 1, 100% in Yr 2 regardless of claims. Restore Benefit: 100% instant restoration.",
       loading: "No loading charges",
       health_checkup: "Yes (Complimentary every renewal year)",
-      claim_record: "~97.37% (Consolidated claims settled ratio)"
+      claim_record: "97.45% (FY2024-25) | 3yr avg: 96.71% | Source: IRDAI NL-37"
     }
   },
   {
     id: "niva-reassure",
     name: "Niva Bupa ReAssure 2.0 (Platinum+)",
     issuer: "Niva Bupa Standalone",
-    csr: "100.00%*",
-    icr: "61.22%",
+    csr: "92.39%",
+    csr3yr: "91.62%",
+    icr: "58.10%",
     solvency: "3.03x",
     complaints: "42.85",
     hospitals: "10,000+",
@@ -120,7 +124,7 @@ const POLICIES = [
       renewal: "Lock the Clock: Fixed premium based on entry age until first claim. ReAssure Forever: Unlimited infinite refills after 1st claim balance usage.",
       loading: "No loading charges",
       health_checkup: "Yes (Available annually from Year 1)",
-      claim_record: "~92.3% (Multi-year average)"
+      claim_record: "92.39% (FY2024-25) | 3yr avg: 91.62% | Source: IRDAI NL-37"
     }
   },
   {
@@ -128,6 +132,7 @@ const POLICIES = [
     name: "Care Health Care Supreme",
     issuer: "Care Health Standalone",
     csr: "92.77%",
+    csr3yr: "92.50%",
     icr: "65.00%",
     solvency: "1.68x",
     complaints: "42.00",
@@ -158,7 +163,7 @@ const POLICIES = [
       renewal: "Cumulative Bonus Super: 100% increase per year up to 500% (via rider). Unlimited Recharge: Unlimited automatic restoration for subsequent claims.",
       loading: "No loading charges",
       health_checkup: "Yes (Available via wellness framework / add-on)",
-      claim_record: "~95.2%"
+      claim_record: "92.77% (FY2024-25) | 3yr avg: 92.50% | Source: IRDAI NL-37"
     }
   },
   {
@@ -166,6 +171,7 @@ const POLICIES = [
     name: "TATA AIG MediCare Premier",
     issuer: "Tata AIG General",
     csr: "94.14%",
+    csr3yr: "93.80%",
     icr: "77.50%",
     solvency: "2.03x",
     complaints: "10.65",
@@ -196,14 +202,15 @@ const POLICIES = [
       renewal: "Cumulative Bonus: 50% increase per claim-free year up to 100% max. Bonus does not reduce even if claims are filed.",
       loading: "No loading charges",
       health_checkup: "Once every policy year",
-      claim_record: "~94.8%"
+      claim_record: "94.14% (FY2024-25) | 3yr avg: 93.80% | Source: IRDAI NL-37"
     }
   },
   {
     id: "ab-activ-one",
     name: "Aditya Birla Activ One MAX",
     issuer: "Aditya Birla Standalone",
-    csr: "100.00%*",
+    csr: "95.81%",
+    csr3yr: "95.81%",
     icr: "68.00%",
     solvency: "1.98x",
     complaints: "18.67",
@@ -234,7 +241,7 @@ const POLICIES = [
       renewal: "Super Credit: Sum insured increases by 100% per year up to 500% regardless of claim status.",
       loading: "No loading charges",
       health_checkup: "Yes (Complimentary annual health assessment)",
-      claim_record: "~94.2%"
+      claim_record: "95.81% (FY2024-25) | 3yr avg: 95.81% | Source: IRDAI NL-37"
     }
   },
   {
@@ -242,6 +249,7 @@ const POLICIES = [
     name: "ICICI Lombard Elevate",
     issuer: "ICICI Lombard General",
     csr: "98.45%",
+    csr3yr: "97.90%",
     icr: "71.00%",
     solvency: "2.69x",
     complaints: "10.67",
@@ -272,7 +280,7 @@ const POLICIES = [
       renewal: "20% loyalty bonus up to 100% guaranteed (doesn't reduce on claim). Reset Benefit: 100% restoration.",
       loading: "No loading charges",
       health_checkup: "Yes (Available via wellness program)",
-      claim_record: "~96.1%"
+      claim_record: "98.45% (FY2024-25) | 3yr avg: 97.90% | Source: IRDAI NL-37"
     }
   }
 ];
@@ -280,19 +288,19 @@ const POLICIES = [
 const METRIC_DEFINITIONS = {
   csr: {
     title: "Claim Settlement Ratio (CSR)",
-    desc: "The percentage of claims an insurer settles in a year. Higher indicates higher reliability, but must be cross-referenced with total complaints."
+    desc: "% of claims settled in a year. Note: a CSR of 100% is a statistical artifact of how pending claims are counted — not a guarantee of full payout. Always prefer the 3-year average over a single-year figure."
   },
   icr: {
     title: "Incurred Claim Ratio (ICR)",
-    desc: "Ratio of net claims settled to net premiums earned. Values between 60%-80% indicate an ideal balance of healthy payout and financial sustainability."
+    desc: "Net claims paid ÷ net premiums earned. Ideal range: 60–80%. Below 50% may indicate overly restrictive claims handling. Above 100% signals financial stress. HDFC ERGO at ~81% is slightly above ideal but remains stable."
   },
   solvency: {
     title: "Solvency Ratio",
-    desc: "Measures capital reserves to survive high-claim events. IRDAI mandates >1.50x. Higher ratios mean greater financial security."
+    desc: "Capital reserves vs. risk exposure. IRDAI minimum is 1.5x. Niva Bupa at 3.03x is the strongest in this comparison. Higher means greater ability to survive a high-claim event."
   },
   complaints: {
     title: "Complaint Volume",
-    desc: "Average consumer complaints submitted to IRDAI per 10,000 claims. Lower is highly preferred."
+    desc: "Consumer complaints filed with IRDAI per 10,000 claims. Industry average is ~27/10k. HDFC ERGO (9.28) and TATA AIG (10.65) are well below average — a strong positive signal."
   }
 };
 
@@ -342,7 +350,7 @@ export default function Dashboard() {
   // --- COMPUTE PREMIUMS DYNAMICALLY ---
   const calculatePremium = (basePrem: number) => {
     let prem = basePrem;
-    
+
     if (selectedSumInsured === "10") prem = basePrem * 0.85;
     else if (selectedSumInsured === "15") prem = basePrem;
     else if (selectedSumInsured === "25") prem = basePrem * 1.25;
@@ -355,17 +363,17 @@ export default function Dashboard() {
     return Math.round(prem);
   };
 
-  // --- TOGGLE COMPARED PLANS ---
+  // --- TOGGLE COMPARED PLANS (max 4) ---
   const toggleComparison = (id: string) => {
     if (comparedPlanIds.includes(id)) {
       if (comparedPlanIds.length > 1) {
         setComparedPlanIds(comparedPlanIds.filter((pId: string) => pId !== id));
       }
     } else {
-      if (comparedPlanIds.length < 3) {
+      if (comparedPlanIds.length < 4) {
         setComparedPlanIds([...comparedPlanIds, id]);
       } else {
-        setComparedPlanIds([comparedPlanIds[0], comparedPlanIds[1], id]);
+        setComparedPlanIds([comparedPlanIds[0], comparedPlanIds[1], comparedPlanIds[2], id]);
       }
     }
   };
@@ -394,7 +402,7 @@ export default function Dashboard() {
   // --- RECOMMENDER ENGINE LOGIC ---
   const recommendations = useMemo(() => {
     let list = [...POLICIES];
-    
+
     return list.map((plan: Policy) => {
       let score = 0;
       let reasons = [];
@@ -468,34 +476,34 @@ export default function Dashboard() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="bg-emerald-500/10 text-emerald-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-emerald-500/20">
-                IRDAI 2026 Compliant
+              <span className="bg-slate-700/50 text-slate-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-slate-600/40">
+                Data: IRDAI Disclosures FY2024-25
               </span>
-              <span className="text-slate-500 text-xs">• 0% GST Transition Active</span>
+              <span className="text-slate-500 text-xs">• Individual policies GST-exempt w.e.f. 22 Sep 2025</span>
             </div>
             <h1 className="text-xl md:text-2xl font-bold tracking-tight text-white flex items-center gap-2">
               <Shield className="h-6 text-emerald-500 fill-emerald-500/10" />
               Indian Retail Health Insurance Matrix
             </h1>
             <p className="text-xs text-slate-400 mt-1 max-w-xl">
-              Deep research portal comparing elite retail products based on the 17-parameter Google Sheet architecture and actuarial underwriting performance.
+              Independent comparison of 6 retail health plans. Metrics sourced from IRDAI NL-37, NL-45 &amp; NL-26 (Q4 FY2024-25). Premiums shown are indicative — actual costs depend on age, zone &amp; underwriting.
             </p>
           </div>
           <div className="flex bg-slate-900 border border-slate-800 p-1 rounded-lg">
-            <button 
-              onClick={() => setActiveTab("comparison")} 
+            <button
+              onClick={() => setActiveTab("comparison")}
               className={`px-4 py-2 rounded-md text-xs font-semibold transition-all ${activeTab === "comparison" ? "bg-emerald-600 text-white shadow" : "text-slate-400 hover:text-white"}`}
             >
               <Layers className="inline-block h-3.5 w-3.5 mr-1.5" /> Compare Matrix
             </button>
-            <button 
-              onClick={() => setActiveTab("calculators")} 
+            <button
+              onClick={() => setActiveTab("calculators")}
               className={`px-4 py-2 rounded-md text-xs font-semibold transition-all ${activeTab === "calculators" ? "bg-emerald-600 text-white shadow" : "text-slate-400 hover:text-white"}`}
             >
               <Sliders className="inline-block h-3.5 w-3.5 mr-1.5" /> Risk Simulators
             </button>
-            <button 
-              onClick={() => setActiveTab("recommendation")} 
+            <button
+              onClick={() => setActiveTab("recommendation")}
               className={`px-4 py-2 rounded-md text-xs font-semibold transition-all ${activeTab === "recommendation" ? "bg-emerald-600 text-white shadow" : "text-slate-400 hover:text-white"}`}
             >
               <Sparkles className="inline-block h-3.5 w-3.5 mr-1.5" /> Portfolio Advisor
@@ -517,33 +525,43 @@ export default function Dashboard() {
         </div>
       </section>
 
+      {/* --- AMBER DISCLAIMER BANNER --- */}
+      <div className="bg-amber-950/30 border-b border-amber-800/30 px-6 py-3">
+        <div className="max-w-7xl mx-auto flex items-start gap-3">
+          <AlertTriangle className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
+          <p className="text-xs text-amber-300/80 leading-relaxed">
+            <strong className="text-amber-400">Indicative data only.</strong> Metrics from IRDAI public disclosures (NL-37, NL-45, NL-26), Q4 FY2024-25. Premiums are illustrative — not quotes. Verify with your insurer before purchase. <span className="text-amber-500/70">Last updated: April 2026.</span>
+          </p>
+        </div>
+      </div>
+
       {/* --- MAIN LAYOUT --- */}
       <main className="max-w-7xl mx-auto px-4 md:px-6 py-8">
-        
+
         {/* CONFIGURATOR WIDGET */}
         <div className="bg-slate-950 rounded-xl border border-slate-800 p-5 mb-8 shadow-sm">
           <div className="flex items-center gap-2 mb-4 pb-4 border-b border-slate-800/60">
             <Sliders className="h-5 w-5 text-emerald-500" />
             <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300">
-              Personal Profile & Actuarial Cost Engine
+              Personal Profile &amp; Actuarial Cost Engine
             </h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            
+
             {/* Demographic Selector */}
             <div>
               <label className="block text-xs font-semibold text-slate-400 mb-2 flex items-center gap-1.5">
                 <Users className="h-3 w-3" /> Demographic Group
               </label>
-              <select 
+              <select
                 value={selectedProfile}
                 onChange={(e) => setSelectedProfile(e.target.value)}
                 className="w-full bg-slate-900 border border-slate-800 rounded-lg py-2 px-3 text-xs font-semibold text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
               >
                 <option value="individual">Individual (Age 25)</option>
-                <option value="couple">Couple (Ages 31 & 32)</option>
+                <option value="couple">Couple (Ages 31 &amp; 32)</option>
                 <option value="family">Family (2 Adults, 1 Child - 35, 34, 5)</option>
-                <option value="senior">Seniors (Ages 62 & 63)</option>
+                <option value="senior">Seniors (Ages 62 &amp; 63)</option>
               </select>
             </div>
 
@@ -570,7 +588,7 @@ export default function Dashboard() {
               <label className="block text-xs font-semibold text-slate-400 mb-2 flex items-center gap-1.5">
                 <DollarSign className="h-3 w-3" /> Geographical Zone
               </label>
-              <select 
+              <select
                 value={selectedZone}
                 onChange={(e) => setSelectedZone(e.target.value)}
                 className="w-full bg-slate-900 border border-slate-800 rounded-lg py-2 px-3 text-xs font-semibold text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
@@ -587,7 +605,7 @@ export default function Dashboard() {
                 <Info className="h-3.5 w-3.5 shrink-0" /> Actuarial Pricing Insight
               </div>
               <p className="text-[11px] text-slate-400 leading-relaxed">
-                Premiums are modeled using 2026 post-GST statutory abolition limits. Standalone players apply aggressive discounts via step trackers.
+                Individual health insurance is GST-exempt from 22 Sep 2025 (56th GST Council). Group policies still attract 18% GST. All premiums shown are illustrative — not quotes.
               </p>
             </div>
 
@@ -597,18 +615,18 @@ export default function Dashboard() {
         {/* --- TAB 1: COMPARISON MATRIX --- */}
         {activeTab === "comparison" && (
           <div>
-            
+
             {/* INSTRUCTIONS & METRICS SUMMARY */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
               <div className="lg:col-span-2 bg-slate-950 p-5 rounded-xl border border-slate-800">
                 <h3 className="text-sm font-bold text-slate-300 mb-3 uppercase tracking-wider flex items-center gap-2">
-                  <Activity className="h-4 w-4 text-emerald-500" /> Underwriting & Solvency Ratios
+                  <Activity className="h-4 w-4 text-emerald-500" /> Underwriting &amp; Solvency Ratios
                 </h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {Object.entries(METRIC_DEFINITIONS).map(([key, item]: [string, { title: string; desc: string }]) => (
                     <div key={key} className="bg-slate-900 p-3 rounded-lg border border-slate-800/80 hover:border-slate-700 transition">
                       <div className="text-[11px] font-semibold text-slate-400 uppercase mb-1 flex items-center justify-between">
-                        {item.title.split(' ')[0]} 
+                        {item.title.split(' ')[0]}
                         <span title={item.desc}><HelpCircle className="h-3 w-3 text-slate-600 hover:text-slate-400 cursor-pointer" /></span>
                       </div>
                       <p className="text-xs text-slate-500 leading-tight mt-1">{item.desc.substring(0, 52)}...</p>
@@ -621,14 +639,14 @@ export default function Dashboard() {
                 <div>
                   <h4 className="text-xs font-bold uppercase text-emerald-400 tracking-wider mb-2">Matrix Controls</h4>
                   <p className="text-xs text-slate-300 leading-relaxed">
-                    Select up to 3 plans below to populate the detailed comparison grid. The grid replicates the complete schema of your Google Sheet.
+                    Select up to 4 plans below to populate the detailed comparison grid.
                   </p>
                 </div>
                 <div className="flex gap-2 flex-wrap mt-3">
                   {POLICIES.map((p: Policy) => {
                     const isSelected = comparedPlanIds.includes(p.id);
                     return (
-                      <button 
+                      <button
                         key={p.id}
                         onClick={() => toggleComparison(p.id)}
                         className={`px-2.5 py-1 rounded text-[10px] font-bold transition flex items-center gap-1 ${isSelected ? "bg-emerald-600 text-white border border-emerald-500" : "bg-slate-900 text-slate-400 border border-slate-800"}`}
@@ -648,7 +666,7 @@ export default function Dashboard() {
                 const isCompared = comparedPlanIds.includes(plan.id);
                 const premium = calculatePremium(plan.premiumBase[selectedProfile as keyof typeof plan.premiumBase]);
                 return (
-                  <div 
+                  <div
                     key={plan.id}
                     className={`rounded-xl border transition-all ${isCompared ? "border-emerald-500 bg-slate-950 ring-1 ring-emerald-500/20" : "border-slate-800 bg-slate-950/70 hover:border-slate-700 hover:bg-slate-950"}`}
                   >
@@ -657,7 +675,7 @@ export default function Dashboard() {
                         <span className="text-xs text-emerald-400 font-semibold tracking-wide">
                           {plan.issuer}
                         </span>
-                        <button 
+                        <button
                           onClick={() => toggleComparison(plan.id)}
                           className={`px-3 py-1 rounded text-[10px] font-bold tracking-wide transition ${isCompared ? "bg-emerald-950 text-emerald-300 border border-emerald-700" : "bg-slate-900 text-slate-400 border border-slate-800 hover:text-white"}`}
                         >
@@ -667,7 +685,7 @@ export default function Dashboard() {
                       <h3 className="text-base font-bold text-white mb-3 tracking-tight">{plan.name}</h3>
                       <div className="flex items-baseline gap-2">
                         <span className="text-2xl font-black text-emerald-400">₹{premium.toLocaleString('en-IN')}</span>
-                        <span className="text-xs text-slate-400 font-medium">/ year (incl. GST)</span>
+                        <span className="text-xs text-slate-400 font-medium">/ year (indicative)</span>
                       </div>
                     </div>
 
@@ -675,6 +693,7 @@ export default function Dashboard() {
                       <div>
                         <div className="text-slate-500 font-semibold">CSR</div>
                         <div className="text-white font-bold text-xs mt-0.5">{plan.csr}</div>
+                        <div className="text-slate-600 text-[9px] mt-0.5">3yr: {plan.csr3yr}</div>
                       </div>
                       <div className="border-x border-slate-800/80">
                         <div className="text-slate-500 font-semibold">ICR</div>
@@ -700,7 +719,7 @@ export default function Dashboard() {
                       </div>
                       <div className="pt-2 border-t border-slate-800/60 flex justify-between items-center">
                         <span className="text-[10px] text-slate-500">IRDAI Complaint Index: {plan.complaints}/10k claims</span>
-                        <button 
+                        <button
                           onClick={() => setSelectedPlanDetail(plan)}
                           className="text-xs text-slate-400 hover:text-white font-semibold flex items-center gap-1 transition"
                         >
@@ -718,10 +737,10 @@ export default function Dashboard() {
               <div className="px-6 py-4 bg-slate-900/60 border-b border-slate-800 flex justify-between items-center">
                 <div>
                   <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                    <FileText className="h-4 w-4 text-emerald-500" /> Comparison Matrix (Google Sheet Format)
+                    <FileText className="h-4 w-4 text-emerald-500" /> Side-by-Side Comparison
                   </h3>
                   <p className="text-[11px] text-slate-400 mt-1">
-                    Exhaustive side-by-side analysis mapping back to your preferred structure.
+                    Exhaustive side-by-side analysis of all 17 policy parameters.
                   </p>
                 </div>
                 <div className="text-xs font-semibold text-emerald-400">
@@ -730,10 +749,10 @@ export default function Dashboard() {
               </div>
 
               <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse min-w-[700px]">
+                <table className="w-full text-left border-collapse min-w-[900px]">
                   <thead>
                     <tr className="border-b border-slate-800 bg-slate-950">
-                      <th className="p-4 text-xs font-bold uppercase tracking-wider text-slate-400 w-1/4 border-r border-slate-800">
+                      <th className="p-4 text-xs font-bold uppercase tracking-wider text-slate-400 w-1/5 border-r border-slate-800">
                         Feature / Category
                       </th>
                       {comparedPlanIds.map((planId: string) => {
@@ -741,10 +760,12 @@ export default function Dashboard() {
                         if (!plan) return null;
                         const calculatedPrem = calculatePremium(plan.premiumBase[selectedProfile as keyof typeof plan.premiumBase]);
                         return (
-                          <th key={planId} className="p-4 text-xs font-bold text-center w-1/4 border-r border-slate-800 last:border-r-0">
+                          <th key={planId} className="p-4 text-xs font-bold text-center border-r border-slate-800 last:border-r-0">
                             <div className="text-white text-sm font-black mb-1">{plan.name}</div>
                             <div className="text-[10px] text-slate-500 tracking-wide font-semibold">{plan.issuer}</div>
                             <div className="mt-2 text-emerald-400 text-sm font-extrabold">₹{calculatedPrem.toLocaleString('en-IN')}/yr</div>
+                            <div className="text-[9px] text-slate-600 mt-0.5">indicative premium</div>
+                            <div className="text-[9px] text-slate-500 mt-0.5">CSR: {plan.csr} <span className="text-slate-600">(3yr: {plan.csr3yr})</span></div>
                           </th>
                         );
                       })}
@@ -798,7 +819,7 @@ export default function Dashboard() {
         {/* --- TAB 2: INTERACTIVE RISK CALCULATORS --- */}
         {activeTab === "calculators" && (
           <div className="space-y-8">
-            
+
             {/* PROPORTIONAL DEDUCTION TRAP SIMULATOR */}
             <div className="bg-slate-950 rounded-xl border border-slate-800 p-6 shadow-md">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-800 pb-4 mb-6 gap-2">
@@ -816,7 +837,7 @@ export default function Dashboard() {
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                
+
                 {/* SLIDERS COLUMN */}
                 <div className="lg:col-span-2 space-y-6">
                   {/* Slider 1: Total Bill */}
@@ -825,10 +846,10 @@ export default function Dashboard() {
                       <span>Total Admissible Hospital Bill</span>
                       <span className="text-emerald-400">₹{totalBill.toLocaleString('en-IN')}</span>
                     </div>
-                    <input 
-                      type="range" 
-                      min="50000" 
-                      max="1000000" 
+                    <input
+                      type="range"
+                      min="50000"
+                      max="1000000"
                       step="25000"
                       value={totalBill}
                       onChange={(e) => setTotalBill(Number(e.target.value))}
@@ -846,10 +867,10 @@ export default function Dashboard() {
                       <span>Room Rent Allowed in Policy (Per Day)</span>
                       <span className="text-sky-400">₹{roomRentLimit.toLocaleString('en-IN')}</span>
                     </div>
-                    <input 
-                      type="range" 
-                      min="1000" 
-                      max="10000" 
+                    <input
+                      type="range"
+                      min="1000"
+                      max="10000"
                       step="500"
                       value={roomRentLimit}
                       onChange={(e) => setRoomRentLimit(Number(e.target.value))}
@@ -867,10 +888,10 @@ export default function Dashboard() {
                       <span>Actual Room Chosen (Per Day)</span>
                       <span className="text-rose-400 font-extrabold">₹{actualRoomRent.toLocaleString('en-IN')}</span>
                     </div>
-                    <input 
-                      type="range" 
-                      min="1000" 
-                      max="20000" 
+                    <input
+                      type="range"
+                      min="1000"
+                      max="20000"
                       step="500"
                       value={actualRoomRent}
                       onChange={(e) => setActualRoomRent(Number(e.target.value))}
@@ -898,7 +919,7 @@ export default function Dashboard() {
                 <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 flex flex-col justify-between">
                   <div className="text-center">
                     <span className="text-[10px] uppercase font-black tracking-widest text-slate-500">Underwriting Impact</span>
-                    
+
                     {proportionalDeductionResults.deductionApplied ? (
                       <div className="mt-4">
                         <div className="text-xs font-bold text-rose-400 flex items-center justify-center gap-1.5 mb-1">
@@ -930,7 +951,7 @@ export default function Dashboard() {
                         <span className="font-bold text-white">₹{proportionalDeductionResults.admissibleAmount.toLocaleString('en-IN')}</span>
                       </div>
                       <div className="w-full bg-slate-800 h-3 rounded-full overflow-hidden">
-                        <div 
+                        <div
                           className="bg-emerald-500 h-full transition-all duration-300"
                           style={{ width: `${proportionalDeductionResults.pct}%` }}
                         />
@@ -944,7 +965,7 @@ export default function Dashboard() {
                           <span className="font-bold">₹{proportionalDeductionResults.outOfPocket.toLocaleString('en-IN')}</span>
                         </div>
                         <div className="w-full bg-slate-800 h-3 rounded-full overflow-hidden">
-                          <div 
+                          <div
                             className="bg-rose-500 h-full transition-all duration-300"
                             style={{ width: `${100 - proportionalDeductionResults.pct}%` }}
                           />
@@ -984,11 +1005,11 @@ export default function Dashboard() {
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                
+
                 {/* EXPLANATORY CARDS */}
                 <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-4">
                   <h4 className="text-xs font-bold text-white uppercase tracking-wider">Plan Architectures</h4>
-                  
+
                   <div className="border-l-2 border-emerald-500 pl-3">
                     <h5 className="text-xs font-bold text-slate-200">HDFC Ergo (Optima Secure)</h5>
                     <p className="text-[10px] text-slate-400 mt-0.5">
@@ -1020,7 +1041,7 @@ export default function Dashboard() {
 
                   {/* CUSTOM SVG CHART */}
                   <div className="w-full h-56 bg-slate-950 rounded-lg p-2 relative border border-slate-800/80">
-                    
+
                     {/* Y-Axis Guidlines */}
                     <div className="absolute inset-x-0 top-1/4 border-t border-slate-800/40 text-[9px] text-slate-600 pt-0.5 pl-2">6X SI (₹60L)</div>
                     <div className="absolute inset-x-0 top-2/4 border-t border-slate-800/40 text-[9px] text-slate-600 pt-0.5 pl-2">3X SI (₹30L)</div>
@@ -1099,7 +1120,7 @@ export default function Dashboard() {
         {/* --- TAB 3: SMART ADVISOR --- */}
         {activeTab === "recommendation" && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
+
             {/* INPUT PANEL (Left 1/3) */}
             <div className="bg-slate-950 p-6 rounded-xl border border-slate-800 h-fit space-y-6 shadow-sm">
               <div>
@@ -1165,7 +1186,7 @@ export default function Dashboard() {
                 >
                   <option value="features">Rich Base Features (Multiplier Covers, Inbuilt Consumables)</option>
                   <option value="budget">Aggressive Pricing (Maximum Coverage per Rupee)</option>
-                  <option value="wellness">Wellness Incentive & Active Lifestyle Discounts</option>
+                  <option value="wellness">Wellness Incentive &amp; Active Lifestyle Discounts</option>
                 </select>
               </div>
 
@@ -1197,7 +1218,7 @@ export default function Dashboard() {
 
             {/* RECOMMENDED OPTIONS PANEL (Right 2/3) */}
             <div className="lg:col-span-2 space-y-6">
-              
+
               <div className="flex justify-between items-center mb-1">
                 <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest">
                   Personalized Plan Rankings
@@ -1208,9 +1229,9 @@ export default function Dashboard() {
               {recommendations.slice(0, 3).map((plan: Policy, idx: number) => {
                 const calculatedPrem = calculatePremium(plan.premiumBase[selectedProfile as keyof typeof plan.premiumBase]);
                 const scorePercentage = Math.min(100, Math.max(20, 60 + ((plan.score ?? 0) * 8)));
-                
+
                 return (
-                  <div 
+                  <div
                     key={plan.id}
                     className="bg-slate-950 rounded-xl border border-slate-800 p-5 relative overflow-hidden flex flex-col md:flex-row justify-between gap-6 hover:border-slate-700 transition shadow"
                   >
@@ -1256,8 +1277,9 @@ export default function Dashboard() {
 
                       <div className="flex gap-4 pt-2">
                         <div className="text-[11px]">
-                          <span className="text-slate-500 block">CSR Rate</span>
+                          <span className="text-slate-500 block">CSR (FY2024-25)</span>
                           <span className="font-extrabold text-white">{plan.csr}</span>
+                          <span className="text-slate-600 text-[9px] block">3yr avg: {plan.csr3yr}</span>
                         </div>
                         <div className="border-l border-slate-800 pl-4 text-[11px]">
                           <span className="text-slate-500 block">Grievance Index</span>
@@ -1275,10 +1297,10 @@ export default function Dashboard() {
                       <div>
                         <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider block mb-1">Calculated Premium</span>
                         <div className="text-2xl font-black text-emerald-400">₹{calculatedPrem.toLocaleString('en-IN')}</div>
-                        <span className="text-[9px] text-slate-500 block mt-0.5">Annual cost (incl. taxes)</span>
+                        <span className="text-[9px] text-slate-500 block mt-0.5">Annual cost (indicative)</span>
                       </div>
-                      
-                      <button 
+
+                      <button
                         onClick={() => setSelectedPlanDetail(plan)}
                         className="w-full mt-4 bg-slate-800 hover:bg-slate-700 text-xs font-bold py-2 rounded-lg text-slate-200 hover:text-white transition"
                       >
@@ -1297,7 +1319,7 @@ export default function Dashboard() {
                   <div>
                     <h4 className="text-sm font-bold text-white uppercase tracking-wider">Actuarial Diversification Advisory</h4>
                     <p className="text-xs text-slate-300 leading-relaxed mt-1">
-                      Are you purchasing for a family that includes senior citizens or aging parents? **Do not purchase a single unified family floater policy.** Since floater premiums are priced using the eldest member's age, and a claim by one member wipes out the Cumulative No Claim Bonus (NCB) for everyone, 
+                      Are you purchasing for a family that includes senior citizens or aging parents? **Do not purchase a single unified family floater policy.** Since floater premiums are priced using the eldest member's age, and a claim by one member wipes out the Cumulative No Claim Bonus (NCB) for everyone,
                       we highly recommend splitting your portfolio:
                     </p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
@@ -1334,7 +1356,7 @@ export default function Dashboard() {
                 <span className="text-[10px] uppercase font-black tracking-widest text-emerald-400">{selectedPlanDetail.issuer}</span>
                 <h3 className="text-lg font-bold text-white mt-1">{selectedPlanDetail.name}</h3>
               </div>
-              <button 
+              <button
                 onClick={() => setSelectedPlanDetail(null)}
                 className="bg-slate-850 p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition"
               >
@@ -1346,8 +1368,9 @@ export default function Dashboard() {
               {/* Financial/Underwriting performance */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-slate-950 p-4 rounded-lg border border-slate-800 text-center">
                 <div>
-                  <span className="text-[10px] text-slate-500 block">Claim Settlement</span>
+                  <span className="text-[10px] text-slate-500 block">CSR (FY2024-25)</span>
                   <strong className="text-sm text-white">{selectedPlanDetail.csr}</strong>
+                  <span className="text-[9px] text-slate-600 block mt-0.5">3yr avg: {selectedPlanDetail.csr3yr}</span>
                 </div>
                 <div>
                   <span className="text-[10px] text-slate-500 block">Incurred Claim</span>
@@ -1363,12 +1386,12 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              {/* Terms breakdown aligned with the Sheet features */}
+              {/* Terms breakdown */}
               <div className="space-y-4">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 pb-2 border-b border-slate-800/60">
-                  Detailed Parameters Breakdowns (Google Sheet Mapping)
+                  Detailed Parameters Breakdown
                 </h4>
-                
+
                 {SHEET_FEATURES.map((feature: SheetFeature) => {
                   const val = selectedPlanDetail.features[feature.key];
                   return (
@@ -1382,7 +1405,7 @@ export default function Dashboard() {
 
               {/* Dynamic Action Buttons */}
               <div className="flex gap-3 pt-4 border-t border-slate-800">
-                <button 
+                <button
                   onClick={() => setSelectedPlanDetail(null)}
                   className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-lg text-xs transition"
                 >
@@ -1396,13 +1419,17 @@ export default function Dashboard() {
       )}
 
       {/* --- FOOTER --- */}
-      <footer className="border-t border-slate-850 bg-slate-950 py-8 px-6 text-center text-slate-500 text-xs mt-16">
-        <div className="max-w-7xl mx-auto space-y-2">
-          <p>
-            Retail Health Insurance Deep Research Matrix & Portfolio Planner © 2026. All underwriting variables are governed by recent IRDAI directives.
+      <footer className="border-t border-slate-800 bg-slate-950 py-10 px-6 mt-16">
+        <div className="max-w-7xl mx-auto space-y-4 text-center">
+          <p className="text-xs text-slate-400">
+            <strong className="text-slate-300">Data Sources:</strong> CSR from IRDAI NL-37 &nbsp;|&nbsp; Complaints from IRDAI NL-45 &nbsp;|&nbsp; Solvency from IRDAI NL-26 &nbsp;|&nbsp; All from Q4 FY2024-25 public disclosures. Last updated: April 2026.
           </p>
-          <p className="text-[10px]">
-            Data synced continuously with file cohorts. Actuarial pricing is subject to individual underwriting assessment, pre-existing histories, and regional zone regulations.
+          <p className="text-xs text-amber-400/70 flex items-center justify-center gap-1.5">
+            <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
+            Premiums are indicative only and will vary based on age, medical history, zone, add-ons, and underwriting. Individual health insurance premiums are GST-exempt from 22 September 2025 (56th GST Council). Group health insurance continues to attract 18% GST.
+          </p>
+          <p className="text-[11px] text-slate-600">
+            This is an independent comparison tool and does not constitute financial advice. Not affiliated with any insurer. Always read the complete policy wording before purchase. Verify all data at irdai.gov.in
           </p>
         </div>
       </footer>
