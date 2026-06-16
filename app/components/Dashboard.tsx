@@ -646,7 +646,7 @@ export default function Dashboard() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
               {POLICIES.map((plan: Policy) => {
                 const isCompared = comparedPlanIds.includes(plan.id);
-                const premium = calculatePremium(plan.premiumBase[selectedProfile as keyof Policy['premiumBase']]);
+                const premium = calculatePremium(plan.premiumBase[selectedProfile as keyof typeof plan.premiumBase]);
                 return (
                   <div 
                     key={plan.id}
@@ -738,11 +738,12 @@ export default function Dashboard() {
                       </th>
                       {comparedPlanIds.map((planId: string) => {
                         const plan = POLICIES.find(p => p.id === planId);
-                        const calculatedPrem = calculatePremium(plan!.premiumBase[selectedProfile as keyof Policy['premiumBase']]);
+                        if (!plan) return null;
+                        const calculatedPrem = calculatePremium(plan.premiumBase[selectedProfile as keyof typeof plan.premiumBase]);
                         return (
                           <th key={planId} className="p-4 text-xs font-bold text-center w-1/4 border-r border-slate-800 last:border-r-0">
-                            <div className="text-white text-sm font-black mb-1">{plan!.name}</div>
-                            <div className="text-[10px] text-slate-500 tracking-wide font-semibold">{plan!.issuer}</div>
+                            <div className="text-white text-sm font-black mb-1">{plan.name}</div>
+                            <div className="text-[10px] text-slate-500 tracking-wide font-semibold">{plan.issuer}</div>
                             <div className="mt-2 text-emerald-400 text-sm font-extrabold">₹{calculatedPrem.toLocaleString('en-IN')}/yr</div>
                           </th>
                         );
@@ -759,7 +760,8 @@ export default function Dashboard() {
                           </td>
                           {/* Plan Values */}
                           {comparedPlanIds.map((planId: string) => {
-                            const plan = POLICIES.find(p => p.id === planId)!;
+                            const plan = POLICIES.find(p => p.id === planId);
+                            if (!plan) return null;
                             let value = (plan.features as Record<string, string>)[feature.key];
 
                             return (
@@ -1204,7 +1206,7 @@ export default function Dashboard() {
               </div>
 
               {recommendations.slice(0, 3).map((plan: Policy, idx: number) => {
-                const calculatedPrem = calculatePremium(plan.premiumBase[selectedProfile as keyof Policy['premiumBase']]);
+                const calculatedPrem = calculatePremium(plan.premiumBase[selectedProfile as keyof typeof plan.premiumBase]);
                 const scorePercentage = Math.min(100, Math.max(20, 60 + ((plan.score ?? 0) * 8)));
                 
                 return (
@@ -1236,7 +1238,7 @@ export default function Dashboard() {
                       <div>
                         <h5 className="text-[10px] uppercase font-bold text-emerald-500 tracking-wider mb-1.5">Why this fits your profile:</h5>
                         <ul className="space-y-1.5">
-                          {(plan.reasons?.length ?? 0) > 0 ? (
+                          {(plan.reasons ?? []).length > 0 ? (
                             (plan.reasons ?? []).map((reason: string, rIdx: number) => (
                               <li key={rIdx} className="text-xs text-slate-300 flex items-start gap-1.5">
                                 <Check className="h-3.5 w-3.5 text-emerald-500 shrink-0 mt-0.5" />
