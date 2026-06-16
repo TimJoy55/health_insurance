@@ -400,9 +400,9 @@ const sublimitColor = (status: string) => {
 const Tooltip = ({ text }: { text: string }) => (
   <span className="relative inline-flex items-center group ml-1">
     <HelpCircle className="h-3.5 w-3.5 text-slate-600 group-hover:text-slate-300 cursor-help transition-colors duration-150 shrink-0" />
-    <span className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 rounded-lg px-3 py-2.5 text-xs leading-relaxed bg-slate-700 border border-slate-600 text-slate-200 shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-100 z-50 normal-case font-normal tracking-normal">
+    <span className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 rounded-lg px-3 py-2.5 text-xs leading-relaxed bg-slate-600 border border-slate-500 text-slate-100 shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-100 z-50 normal-case font-normal tracking-normal">
       {text}
-      <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-700" />
+      <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-600" />
     </span>
   </span>
 );
@@ -410,9 +410,19 @@ const Tooltip = ({ text }: { text: string }) => (
 const TooltipRight = ({ text }: { text: string }) => (
   <span className="relative inline-flex items-center group ml-1">
     <HelpCircle className="h-3.5 w-3.5 text-slate-600 group-hover:text-slate-300 cursor-help transition-colors duration-150 shrink-0" />
-    <span className="pointer-events-none absolute bottom-full left-0 mb-2 w-64 rounded-lg px-3 py-2.5 text-xs leading-relaxed bg-slate-700 border border-slate-600 text-slate-200 shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-100 z-50 normal-case font-normal tracking-normal">
+    <span className="pointer-events-none absolute bottom-full left-0 mb-2 w-64 rounded-lg px-3 py-2.5 text-xs leading-relaxed bg-slate-600 border border-slate-500 text-slate-100 shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-100 z-50 normal-case font-normal tracking-normal">
       {text}
-      <span className="absolute top-full left-4 border-4 border-transparent border-t-slate-700" />
+      <span className="absolute top-full left-4 border-4 border-transparent border-t-slate-600" />
+    </span>
+  </span>
+);
+
+const TooltipDown = ({ text }: { text: string }) => (
+  <span className="relative inline-flex items-center group ml-1">
+    <HelpCircle className="h-3.5 w-3.5 text-slate-500 group-hover:text-slate-300 cursor-help transition-colors duration-150 shrink-0" />
+    <span className="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 rounded-lg px-3 py-2.5 text-xs leading-relaxed bg-slate-600 border border-slate-500 text-slate-100 shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-100 z-50 normal-case font-normal tracking-normal">
+      {text}
+      <span className="absolute bottom-full left-1/2 -translate-x-1/2 border-4 border-transparent border-b-slate-600" />
     </span>
   </span>
 );
@@ -642,13 +652,13 @@ export default function Dashboard() {
       {/* --- UNDERWRITING BASELINE STRIP --- */}
       <section className="bg-emerald-950/20 border-b border-emerald-900/30 px-6 py-3">
         <div className="max-w-7xl mx-auto flex flex-wrap gap-y-2 gap-x-6 text-xs text-emerald-400 justify-center md:justify-start">
-          <span><strong>Waiting Period limit:</strong> Max 36 Months PED Cap<Tooltip text="A waiting period is a time after buying the policy during which certain illnesses are not covered. PED = Pre-Existing Disease (any condition you had before buying the policy). Most plans make you wait 3 years before covering PEDs. The IRDAI cap means no insurer can make you wait more than 3 years." /></span>
+          <span><strong>Waiting Period limit:</strong> Max 36 Months PED Cap<TooltipDown text="A waiting period is a time after buying the policy during which certain illnesses are not covered. PED = Pre-Existing Disease (any condition you had before buying the policy). Most plans make you wait 3 years before covering PEDs. The IRDAI cap means no insurer can make you wait more than 3 years." /></span>
           <span className="text-slate-600">|</span>
-          <span><strong>Cashless Timelines:</strong> 1-Hour Authorization, 3-Hour Discharge<Tooltip text="Cashless means the insurer pays the hospital directly — you don't need to pay upfront and claim later. Authorization is the insurer's approval before treatment begins. IRDAI now mandates insurers must approve within 1 hour and clear final discharge within 3 hours." /></span>
+          <span><strong>Cashless Timelines:</strong> 1-Hour Authorization, 3-Hour Discharge<TooltipDown text="Cashless means the insurer pays the hospital directly — you don't need to pay upfront and claim later. Authorization is the insurer's approval before treatment begins. IRDAI now mandates insurers must approve within 1 hour and clear final discharge within 3 hours." /></span>
           <span className="text-slate-600">|</span>
-          <span><strong>Ayush Parity:</strong> Full Sum Insured Covered<Tooltip text="AYUSH refers to Ayurveda, Yoga, Unani, Siddha, and Homeopathy treatments. Parity means these alternative treatments are now covered up to the same limit as regular hospital treatment — not a lower sub-limit." /></span>
+          <span><strong>Ayush Parity:</strong> Full Sum Insured Covered<TooltipDown text="AYUSH refers to Ayurveda, Yoga, Unani, Siddha, and Homeopathy treatments. Parity means these alternative treatments are now covered up to the same limit as regular hospital treatment — not a lower sub-limit." /></span>
           <span className="text-slate-600">|</span>
-          <span><strong>Moratorium:</strong> Reduced to 5 Years<Tooltip text="The moratorium period is the maximum time after which an insurer can no longer question or reject a claim based on non-disclosure of a pre-existing condition (except in cases of proven fraud). IRDAI reduced this from 8 years to 5 years, giving policyholders faster protection." /></span>
+          <span><strong>Moratorium:</strong> Reduced to 5 Years<TooltipDown text="The moratorium period is the maximum time after which an insurer can no longer question or reject a claim based on non-disclosure of a pre-existing condition (except in cases of proven fraud). IRDAI reduced this from 8 years to 5 years, giving policyholders faster protection." /></span>
         </div>
       </section>
 
@@ -957,7 +967,7 @@ export default function Dashboard() {
                   <div className="text-left">
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-bold text-white uppercase tracking-wider">Sub-limits &amp; Surgery Caps</span>
-                      <Tooltip text="A sub-limit is a cap on how much the insurer pays for a specific procedure, even if your total sum insured is much higher. For example, a ₹1L robotic surgery sub-limit on a ₹10L policy means you pay the remaining cost out of pocket. Plans with no sub-limits give you the full sum insured for any covered procedure." />
+                      <TooltipDown text="A sub-limit is a cap on how much the insurer pays for a specific procedure, even if your total sum insured is much higher. For example, a ₹1L robotic surgery sub-limit on a ₹10L policy means you pay the remaining cost out of pocket. Plans with no sub-limits give you the full sum insured for any covered procedure." />
                     </div>
                     <p className="text-[11px] text-slate-400 mt-0.5">
                       Hidden policy caps that only appear at claim time — the most overlooked factor in plan selection
