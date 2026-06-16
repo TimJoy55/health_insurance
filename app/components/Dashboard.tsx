@@ -760,7 +760,7 @@ export default function Dashboard() {
                           {/* Plan Values */}
                           {comparedPlanIds.map((planId: string) => {
                             const plan = POLICIES.find(p => p.id === planId)!;
-                            let value = plan.features[feature.key];
+                            let value = (plan.features as Record<string, string>)[feature.key];
 
                             return (
                               <td key={planId} className="p-4 text-xs text-slate-300 border-r border-slate-800 last:border-r-0 align-top text-center">
