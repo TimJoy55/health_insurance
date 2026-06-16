@@ -464,7 +464,8 @@ const FEATURE_TOOLTIPS: Record<string, string> = {
 export default function Dashboard() {
   // --- STATE ---
   const [activeTab, setActiveTab] = useState("comparison");
-  const [selectedProfile, setSelectedProfile] = useState("individual");
+  const [profileType, setProfileType] = useState<'individual' | 'couple' | 'family' | 'senior'>('individual');
+  const [ages, setAges] = useState({ primary: 30, secondary: 30, child: 8 });
   const [selectedSumInsured, setSelectedSumInsured] = useState("15");
   const [selectedZone, setSelectedZone] = useState("zone1");
   const [comparedPlanIds, setComparedPlanIds] = useState(["hdfc-optima", "niva-reassure", "care-supreme"]);
@@ -496,6 +497,22 @@ export default function Dashboard() {
     if (selectedZone === "zone1") prem = prem * 1.0;
     else if (selectedZone === "zone2") prem = prem * 0.85;
     else if (selectedZone === "zone3") prem = prem * 0.75;
+
+    const oldestAge = profileType === "individual"
+      ? ages.primary
+      : profileType === "family"
+      ? Math.max(ages.primary, ages.secondary, ages.child)
+      : Math.max(ages.primary, ages.secondary);
+
+    let ageMultiplier = 1.0;
+    if (oldestAge <= 25) ageMultiplier = 1.0;
+    else if (oldestAge <= 35) ageMultiplier = 1.15;
+    else if (oldestAge <= 45) ageMultiplier = 1.35;
+    else if (oldestAge <= 55) ageMultiplier = 1.60;
+    else if (oldestAge <= 65) ageMultiplier = 1.90;
+    else ageMultiplier = 2.30;
+
+    prem = prem * ageMultiplier;
 
     return Math.round(prem);
   };
@@ -691,15 +708,53 @@ export default function Dashboard() {
                 <Users className="h-3 w-3" /> Demographic Group
               </label>
               <select
-                value={selectedProfile}
-                onChange={(e) => setSelectedProfile(e.target.value)}
-                className="w-full bg-slate-900 border border-slate-800 rounded-lg py-2 px-3 text-xs font-semibold text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                value={profileType}
+                onChange={(e) => {
+                  const pt = e.target.value as 'individual' | 'couple' | 'family' | 'senior';
+                  setProfileType(pt);
+                  if (pt === 'individual') setAges({ primary: 30, secondary: 30, child: 8 });
+                  else if (pt === 'couple') setAges({ primary: 32, secondary: 30, child: 8 });
+                  else if (pt === 'family') setAges({ primary: 35, secondary: 33, child: 8 });
+                  else setAges({ primary: 62, secondary: 60, child: 8 });
+                }}
+                className="w-full bg-slate-900 border border-slate-800 rounded-lg py-2 px-3 text-xs font-semibold text-white focus:outline-none focus:ring-1 focus:ring-emerald-500 mb-2"
               >
-                <option value="individual">Individual (Age 25)</option>
-                <option value="couple">Couple (Ages 31 &amp; 32)</option>
-                <option value="family">Family (2 Adults, 1 Child - 35, 34, 5)</option>
-                <option value="senior">Seniors (Ages 62 &amp; 63)</option>
+                <option value="individual">Individual</option>
+                <option value="couple">Couple</option>
+                <option value="family">Family (2 Adults + 1 Child)</option>
+                <option value="senior">Senior / Parents</option>
               </select>
+              <div className="flex gap-2 flex-wrap">
+                <div>
+                  <div className="text-slate-400 text-xs mb-1">{profileType === 'senior' ? 'Person 1 Age' : 'Your Age'}</div>
+                  <input
+                    type="number" min={18} max={99} value={ages.primary}
+                    onChange={(e) => setAges(a => ({ ...a, primary: Math.min(99, Math.max(18, Number(e.target.value))) }))}
+                    className="w-14 bg-slate-800 border border-slate-700 text-white rounded-lg px-2 py-2 text-sm text-center focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                  />
+                </div>
+                {profileType !== 'individual' && (
+                  <div>
+                    <div className="text-slate-400 text-xs mb-1">{profileType === 'senior' ? 'Person 2 Age' : "Partner's Age"}</div>
+                    <input
+                      type="number" min={18} max={99} value={ages.secondary}
+                      onChange={(e) => setAges(a => ({ ...a, secondary: Math.min(99, Math.max(18, Number(e.target.value))) }))}
+                      className="w-14 bg-slate-800 border border-slate-700 text-white rounded-lg px-2 py-2 text-sm text-center focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                    />
+                  </div>
+                )}
+                {profileType === 'family' && (
+                  <div>
+                    <div className="text-slate-400 text-xs mb-1">Child&apos;s Age</div>
+                    <input
+                      type="number" min={1} max={99} value={ages.child}
+                      onChange={(e) => setAges(a => ({ ...a, child: Math.min(99, Math.max(1, Number(e.target.value))) }))}
+                      className="w-14 bg-slate-800 border border-slate-700 text-white rounded-lg px-2 py-2 text-sm text-center focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                    />
+                  </div>
+                )}
+              </div>
+              <p className="text-slate-500 text-xs mt-2">Premium estimate based on oldest member&apos;s age. Actual premiums depend on full underwriting assessment.</p>
             </div>
 
             {/* Sum Insured Selector */}
@@ -801,7 +856,7 @@ export default function Dashboard() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
               {POLICIES.map((plan: Policy) => {
                 const isCompared = comparedPlanIds.includes(plan.id);
-                const premium = calculatePremium(plan.premiumBase[selectedProfile as keyof typeof plan.premiumBase]);
+                const premium = calculatePremium(plan.premiumBase[profileType as keyof typeof plan.premiumBase]);
                 return (
                   <div
                     key={plan.id}
@@ -898,7 +953,7 @@ export default function Dashboard() {
                       {comparedPlanIds.map((planId: string) => {
                         const plan = POLICIES.find(p => p.id === planId);
                         if (!plan) return null;
-                        const calculatedPrem = calculatePremium(plan.premiumBase[selectedProfile as keyof typeof plan.premiumBase]);
+                        const calculatedPrem = calculatePremium(plan.premiumBase[profileType as keyof typeof plan.premiumBase]);
                         return (
                           <th key={planId} className="p-4 text-xs font-bold text-center border-r border-slate-800 last:border-r-0">
                             <div className="text-white text-sm font-black mb-1">{plan.name}</div>
@@ -1464,7 +1519,7 @@ export default function Dashboard() {
               </div>
 
               {recommendations.slice(0, 3).map((plan: Policy, idx: number) => {
-                const calculatedPrem = calculatePremium(plan.premiumBase[selectedProfile as keyof typeof plan.premiumBase]);
+                const calculatedPrem = calculatePremium(plan.premiumBase[profileType as keyof typeof plan.premiumBase]);
                 const scorePercentage = Math.min(100, Math.max(20, 60 + ((plan.score ?? 0) * 8)));
 
                 return (
