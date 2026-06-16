@@ -14,6 +14,8 @@ import {
   Check,
   X,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
   DollarSign,
   Activity,
   Users,
@@ -40,6 +42,13 @@ interface Policy {
   pros: string[];
   cons: string[];
   features: Record<string, string>;
+  sublimits: {
+    cataract: { status: 'none' | 'partial' | 'capped'; text: string };
+    joint_replacement: { status: 'none' | 'partial' | 'capped'; text: string };
+    robotic_surgery: { status: 'none' | 'partial' | 'capped'; text: string };
+    daycare_domiciliary: { status: 'none' | 'partial' | 'capped'; text: string };
+    source: string;
+  };
   score?: number;
   reasons?: string[];
 }
@@ -85,7 +94,15 @@ const POLICIES: Policy[] = [
       renewal: "Secure Benefit: 2X cover from Day 1. Plus Benefit: 50% increase in Yr 1, 100% in Yr 2 regardless of claims. Restore Benefit: 100% instant restoration.",
       loading: "No loading charges",
       health_checkup: "Yes (Complimentary every renewal year)",
-      claim_record: "97.45% (FY2024-25) | 3yr avg: 96.71% | Source: IRDAI NL-37"
+      claim_record: "97.45% (FY2024-25) | 3yr avg: 96.71% | Source: IRDAI NL-37",
+      opd_cover: "Not included in core plan. Available via the Optima Wellbeing add-on (covers consultations, diagnostics, pharmacy). Additional premium required. Source: Ditto (Jun 2026), Beshak (Jul 2025)"
+    },
+    sublimits: {
+      cataract: { status: 'none', text: 'No cap — covered up to sum insured' },
+      joint_replacement: { status: 'none', text: 'No cap — covered up to sum insured' },
+      robotic_surgery: { status: 'none', text: 'No cap — covered up to sum insured' },
+      daycare_domiciliary: { status: 'none', text: 'All daycare covered. Domiciliary up to sum insured' },
+      source: 'Official policy wording PDF (UIN: HDFHLIP25011V052425)'
     }
   },
   {
@@ -124,7 +141,15 @@ const POLICIES: Policy[] = [
       renewal: "Lock the Clock: Fixed premium based on entry age until first claim. ReAssure Forever: Unlimited infinite refills after 1st claim balance usage.",
       loading: "No loading charges",
       health_checkup: "Yes (Available annually from Year 1)",
-      claim_record: "92.39% (FY2024-25) | 3yr avg: 91.62% | Source: IRDAI NL-37"
+      claim_record: "92.39% (FY2024-25) | 3yr avg: 91.62% | Source: IRDAI NL-37",
+      opd_cover: "Not included in core plan. The Acute Care add-on provides unlimited tele-consultations via Apollo24X7 (GP, specialist, super-specialist). Additional premium required. Source: Ditto review (Jun 2026)"
+    },
+    sublimits: {
+      cataract: { status: 'none', text: 'No cap — covered up to sum insured' },
+      joint_replacement: { status: 'none', text: 'No cap — covered up to sum insured' },
+      robotic_surgery: { status: 'partial', text: '₹1L cap per claim. Exceptions: cardiac, total radical prostatectomy, partial nephrectomy, malignancies' },
+      daycare_domiciliary: { status: 'none', text: 'All daycare covered. Domiciliary up to sum insured' },
+      source: 'Official policy wording PDF (UIN: NBHHLIP23169V012223, nivabupa.com)'
     }
   },
   {
@@ -163,7 +188,15 @@ const POLICIES: Policy[] = [
       renewal: "Cumulative Bonus Super: 100% increase per year up to 500% (via rider). Unlimited Recharge: Unlimited automatic restoration for subsequent claims.",
       loading: "No loading charges",
       health_checkup: "Yes (Available via wellness framework / add-on)",
-      claim_record: "92.77% (FY2024-25) | 3yr avg: 92.50% | Source: IRDAI NL-37"
+      claim_record: "92.77% (FY2024-25) | 3yr avg: 92.50% | Source: IRDAI NL-37",
+      opd_cover: "Not included in core plan. Care OPD add-on covers up to 4 GP consultations + 4 specialist consultations per year (₹500 cap per consult, from list of 14 specified specialists). Additional premium required. Source: careinsurance.com (Apr 2026), official brochure PDF"
+    },
+    sublimits: {
+      cataract: { status: 'none', text: 'No cap — covered up to sum insured' },
+      joint_replacement: { status: 'none', text: 'No cap — covered up to sum insured' },
+      robotic_surgery: { status: 'none', text: 'No cap — covered up to sum insured' },
+      daycare_domiciliary: { status: 'none', text: 'All daycare covered. Domiciliary up to sum insured' },
+      source: 'careinsurance.com official product page + brochure PDF (Apr 2026)'
     }
   },
   {
@@ -202,7 +235,15 @@ const POLICIES: Policy[] = [
       renewal: "Cumulative Bonus: 50% increase per claim-free year up to 100% max. Bonus does not reduce even if claims are filed.",
       loading: "No loading charges",
       health_checkup: "Once every policy year",
-      claim_record: "94.14% (FY2024-25) | 3yr avg: 93.80% | Source: IRDAI NL-37"
+      claim_record: "94.14% (FY2024-25) | 3yr avg: 93.80% | Source: IRDAI NL-37",
+      opd_cover: "🟡 Built-in with conditions. OPD consultations up to ₹5,000/year; OPD dental up to ₹10,000/year. Applies only after a 24-month waiting period. No additional premium required once waiting period is served. Source: Official policy wording PDF (UIN: TATHLIP21257V022021), Ditto (Jun 2026)"
+    },
+    sublimits: {
+      cataract: { status: 'none', text: 'No cap — covered up to sum insured' },
+      joint_replacement: { status: 'none', text: 'No cap — covered up to sum insured' },
+      robotic_surgery: { status: 'none', text: 'No cap — covered up to sum insured' },
+      daycare_domiciliary: { status: 'none', text: 'All daycare covered. Domiciliary up to sum insured' },
+      source: 'Beshak.org (Apr 2026) + Ditto (Jun 2026) + official policy wording PDF (UIN: TATHLIP21257V022021)'
     }
   },
   {
@@ -241,7 +282,15 @@ const POLICIES: Policy[] = [
       renewal: "Super Credit: Sum insured increases by 100% per year up to 500% regardless of claim status.",
       loading: "No loading charges",
       health_checkup: "Yes (Complimentary annual health assessment)",
-      claim_record: "95.81% (FY2024-25) | 3yr avg: 95.81% | Source: IRDAI NL-37"
+      claim_record: "95.81% (FY2024-25) | 3yr avg: 95.81% | Source: IRDAI NL-37",
+      opd_cover: "🟡 Partial built-in. Unlimited GP tele-consultations included in base plan at no extra cost. Full in-clinic OPD (medicines, diagnostics, in-person consults) available via the Chronic Care Management rider at additional premium. Source: Ditto (Jun 2026), Beshak (Apr 2026)"
+    },
+    sublimits: {
+      cataract: { status: 'none', text: 'No cap — covered up to sum insured' },
+      joint_replacement: { status: 'none', text: 'No cap — covered up to sum insured' },
+      robotic_surgery: { status: 'none', text: 'No cap — covered up to sum insured' },
+      daycare_domiciliary: { status: 'none', text: 'All daycare covered. Domiciliary up to sum insured' },
+      source: 'Beshak.org (Apr 2026) + Policybazaar + insurer website (adityabirlacapital.com)'
     }
   },
   {
@@ -280,7 +329,15 @@ const POLICIES: Policy[] = [
       renewal: "20% loyalty bonus up to 100% guaranteed (doesn't reduce on claim). Reset Benefit: 100% restoration.",
       loading: "No loading charges",
       health_checkup: "Yes (Available via wellness program)",
-      claim_record: "98.45% (FY2024-25) | 3yr avg: 97.90% | Source: IRDAI NL-37"
+      claim_record: "98.45% (FY2024-25) | 3yr avg: 97.90% | Source: IRDAI NL-37",
+      opd_cover: "Not included in core plan. OPD available as an add-on covering consultations, medicines, and diagnostics. Additional premium required. Source: Ditto (Jun 2026), Coversure (2026)"
+    },
+    sublimits: {
+      cataract: { status: 'none', text: 'No cap — covered up to sum insured' },
+      joint_replacement: { status: 'none', text: 'No cap — covered up to sum insured' },
+      robotic_surgery: { status: 'none', text: 'No cap — covered up to sum insured' },
+      daycare_domiciliary: { status: 'partial', text: 'Only 150 listed daycare procedures covered (not all). Up to 15 domiciliary treatments excluded from coverage' },
+      source: 'Beshak.org (Jul 2025) + Ditto (Jun 2026)'
     }
   }
 ];
@@ -322,8 +379,22 @@ const SHEET_FEATURES = [
   { key: "renewal", label: "14. Renewal Benefits" },
   { key: "loading", label: "15. Loading on Claims" },
   { key: "health_checkup", label: "16. Health Checkup" },
-  { key: "claim_record", label: "17. Claim Settlement Record" }
+  { key: "claim_record", label: "17. Claim Settlement Record" },
+  { key: "opd_cover", label: "18. OPD / Outpatient Cover" }
 ];
+
+const SUBLIMIT_ROWS = [
+  { key: "cataract", label: "Cataract Surgery" },
+  { key: "joint_replacement", label: "Joint Replacement" },
+  { key: "robotic_surgery", label: "Robotic Surgery" },
+  { key: "daycare_domiciliary", label: "Daycare & Domiciliary" }
+];
+
+const sublimitColor = (status: string) => {
+  if (status === 'none') return { bg: 'bg-emerald-900/20', text: 'text-emerald-400', icon: '✓' };
+  if (status === 'partial') return { bg: 'bg-amber-900/20', text: 'text-amber-400', icon: '⚠' };
+  return { bg: 'bg-rose-900/20', text: 'text-rose-400', icon: '✕' };
+};
 
 export default function Dashboard() {
   // --- STATE ---
@@ -333,6 +404,7 @@ export default function Dashboard() {
   const [selectedZone, setSelectedZone] = useState("zone1");
   const [comparedPlanIds, setComparedPlanIds] = useState(["hdfc-optima", "niva-reassure", "care-supreme"]);
   const [selectedPlanDetail, setSelectedPlanDetail] = useState<Policy | null>(null);
+  const [sublimitsExpanded, setSublimitsExpanded] = useState(false);
 
   // --- CALCULATOR STATES ---
   const [totalBill, setTotalBill] = useState(300000);
@@ -740,7 +812,7 @@ export default function Dashboard() {
                     <FileText className="h-4 w-4 text-emerald-500" /> Side-by-Side Comparison
                   </h3>
                   <p className="text-[11px] text-slate-400 mt-1">
-                    Exhaustive side-by-side analysis of all 17 policy parameters.
+                    Exhaustive side-by-side analysis of all 18 policy parameters.
                   </p>
                 </div>
                 <div className="text-xs font-semibold text-emerald-400">
@@ -777,7 +849,14 @@ export default function Dashboard() {
                         <tr key={feature.key} className="border-b border-slate-800 hover:bg-slate-900/20 transition-all">
                           {/* Row Header */}
                           <td className="p-4 text-xs font-bold text-slate-300 border-r border-slate-800 align-top">
-                            {feature.label}
+                            {feature.key === 'opd_cover' ? (
+                              <span className="flex items-center gap-1.5">
+                                {feature.label}
+                                <span title="OPD (Outpatient Department) covers doctor visits, diagnostics, and medicines that do not require hospitalisation. Most Indian health plans do NOT include OPD in the base plan — you pay these costs out of pocket unless you buy an OPD add-on. TATA AIG MediCare Premier includes OPD in the base plan, but only after a 24-month waiting period.">
+                                  <HelpCircle className="h-3 w-3 text-slate-600 hover:text-slate-400 cursor-pointer shrink-0" />
+                                </span>
+                              </span>
+                            ) : feature.label}
                           </td>
                           {/* Plan Values */}
                           {comparedPlanIds.map((planId: string) => {
@@ -811,6 +890,102 @@ export default function Dashboard() {
                   </tbody>
                 </table>
               </div>
+            </div>
+
+            {/* SUB-LIMITS PANEL */}
+            <div className="mt-4 bg-slate-950 rounded-xl border border-slate-800 overflow-hidden shadow-lg">
+              <button
+                onClick={() => setSublimitsExpanded(!sublimitsExpanded)}
+                className="w-full px-6 py-4 bg-slate-900/60 border-b border-slate-800 flex justify-between items-center hover:bg-slate-900/80 transition"
+              >
+                <div className="flex items-center gap-3">
+                  <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0" />
+                  <div className="text-left">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-bold text-white uppercase tracking-wider">Sub-limits &amp; Surgery Caps</span>
+                      <span title="A sub-limit is a cap on how much the insurer pays for a specific procedure, even if your total sum insured is much higher. For example, a ₹1L robotic surgery sub-limit on a ₹10L policy means you pay the remaining cost out of pocket. Plans with no sub-limits give you the full sum insured for any covered procedure.">
+                        <HelpCircle className="h-3.5 w-3.5 text-slate-600 hover:text-slate-400 cursor-pointer" />
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 mt-0.5">
+                      Hidden policy caps that only appear at claim time — the most overlooked factor in plan selection
+                    </p>
+                  </div>
+                </div>
+                {sublimitsExpanded
+                  ? <ChevronUp className="h-4 w-4 text-slate-400 shrink-0" />
+                  : <ChevronDown className="h-4 w-4 text-slate-400 shrink-0" />
+                }
+              </button>
+
+              {sublimitsExpanded && (
+                <div>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse min-w-[900px]">
+                      <thead>
+                        <tr className="border-b border-slate-800 bg-slate-950">
+                          <th className="p-4 text-xs font-bold uppercase tracking-wider text-slate-400 w-1/5 border-r border-slate-800">
+                            Procedure / Benefit
+                          </th>
+                          {comparedPlanIds.map((planId: string) => {
+                            const plan = POLICIES.find(p => p.id === planId);
+                            if (!plan) return null;
+                            return (
+                              <th key={planId} className="p-4 text-xs font-bold text-center border-r border-slate-800 last:border-r-0">
+                                <div className="text-white text-sm font-black">{plan.name}</div>
+                                <div className="text-[10px] text-slate-500 mt-0.5">{plan.issuer}</div>
+                              </th>
+                            );
+                          })}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {SUBLIMIT_ROWS.map((row) => (
+                          <tr key={row.key} className="border-b border-slate-800 hover:bg-slate-900/20 transition-all">
+                            <td className="p-4 text-xs font-bold text-slate-300 border-r border-slate-800 align-top">
+                              {row.label}
+                            </td>
+                            {comparedPlanIds.map((planId: string) => {
+                              const plan = POLICIES.find(p => p.id === planId);
+                              if (!plan) return null;
+                              const entry = plan.sublimits[row.key as keyof typeof plan.sublimits];
+                              if (typeof entry === 'string') return null;
+                              const colors = sublimitColor(entry.status);
+                              return (
+                                <td key={planId} className={`p-4 text-xs border-r border-slate-800 last:border-r-0 align-top text-center ${colors.bg}`}>
+                                  <span className={`font-bold text-sm ${colors.text}`}>{colors.icon}</span>
+                                  <p className={`text-[11px] mt-1 leading-relaxed ${colors.text}`}>{entry.text}</p>
+                                </td>
+                              );
+                            })}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Source footnote */}
+                  <div className="px-6 py-4 border-t border-slate-800 space-y-2">
+                    <div className="flex flex-wrap gap-x-6 gap-y-1">
+                      {comparedPlanIds.map((planId: string) => {
+                        const plan = POLICIES.find(p => p.id === planId);
+                        if (!plan) return null;
+                        return (
+                          <p key={planId} className="text-[10px] text-slate-500">
+                            <span className="text-slate-400 font-semibold">{plan.name.split(' ').slice(0, 3).join(' ')}:</span> {plan.sublimits.source}
+                          </p>
+                        );
+                      })}
+                    </div>
+                    <p className="text-[10px] text-slate-500">
+                      Sub-limit data verified from official policy wording PDFs and insurer websites. Cross-checked against Beshak.org (Apr–Jul 2026) and Ditto (Jun 2026). Applies to ₹10L sum insured, base plan only, without add-ons.
+                    </p>
+                    <p className="text-[10px] text-slate-600">
+                      ⚠ Policy terms can change at renewal. Always verify sub-limits in your policy schedule before purchase or at claim time. This data is for the base plan only — add-ons may remove or modify these caps.
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
 
           </div>
