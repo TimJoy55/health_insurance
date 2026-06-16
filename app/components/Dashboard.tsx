@@ -466,6 +466,21 @@ export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("comparison");
   const [profileType, setProfileType] = useState<'individual' | 'couple' | 'family' | 'senior'>('individual');
   const [ages, setAges] = useState({ primary: 30, secondary: 30, child: 8 });
+  const [ageInputs, setAgeInputs] = useState({ primary: "30", secondary: "30", child: "8" });
+
+  const handleAgeChange = (field: 'primary' | 'secondary' | 'child', value: string) => {
+    if (value === '' || /^\d{1,2}$/.test(value)) {
+      setAgeInputs(prev => ({ ...prev, [field]: value }));
+    }
+  };
+
+  const handleAgeBlur = (field: 'primary' | 'secondary' | 'child', isChild?: boolean) => {
+    const min = isChild ? 1 : 18;
+    const parsed = parseInt(ageInputs[field], 10);
+    const clamped = isNaN(parsed) ? (isChild ? 8 : 30) : Math.min(99, Math.max(min, parsed));
+    setAgeInputs(prev => ({ ...prev, [field]: String(clamped) }));
+    setAges(prev => ({ ...prev, [field]: clamped }));
+  };
   const [selectedSumInsured, setSelectedSumInsured] = useState("15");
   const [selectedZone, setSelectedZone] = useState("zone1");
   const [comparedPlanIds, setComparedPlanIds] = useState(["hdfc-optima", "niva-reassure", "care-supreme"]);
@@ -712,10 +727,10 @@ export default function Dashboard() {
                 onChange={(e) => {
                   const pt = e.target.value as 'individual' | 'couple' | 'family' | 'senior';
                   setProfileType(pt);
-                  if (pt === 'individual') setAges({ primary: 30, secondary: 30, child: 8 });
-                  else if (pt === 'couple') setAges({ primary: 32, secondary: 30, child: 8 });
-                  else if (pt === 'family') setAges({ primary: 35, secondary: 33, child: 8 });
-                  else setAges({ primary: 62, secondary: 60, child: 8 });
+                  if (pt === 'individual') { setAges({ primary: 30, secondary: 30, child: 8 }); setAgeInputs({ primary: "30", secondary: "30", child: "8" }); }
+                  else if (pt === 'couple') { setAges({ primary: 32, secondary: 30, child: 8 }); setAgeInputs({ primary: "32", secondary: "30", child: "8" }); }
+                  else if (pt === 'family') { setAges({ primary: 35, secondary: 33, child: 8 }); setAgeInputs({ primary: "35", secondary: "33", child: "8" }); }
+                  else { setAges({ primary: 62, secondary: 60, child: 8 }); setAgeInputs({ primary: "62", secondary: "60", child: "8" }); }
                 }}
                 className="w-full bg-slate-900 border border-slate-800 rounded-lg py-2 px-3 text-xs font-semibold text-white focus:outline-none focus:ring-1 focus:ring-emerald-500 mb-2"
               >
@@ -728,18 +743,22 @@ export default function Dashboard() {
                 <div>
                   <div className="text-slate-400 text-xs mb-1">{profileType === 'senior' ? 'Person 1 Age' : 'Your Age'}</div>
                   <input
-                    type="number" min={18} max={99} value={ages.primary}
-                    onChange={(e) => setAges(a => ({ ...a, primary: Math.min(99, Math.max(18, Number(e.target.value))) }))}
-                    className="w-14 bg-slate-800 border border-slate-700 text-white rounded-lg px-2 py-2 text-sm text-center focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                    type="number" min={18} max={99}
+                    value={ageInputs.primary}
+                    onChange={e => handleAgeChange('primary', e.target.value)}
+                    onBlur={() => handleAgeBlur('primary')}
+                    className="w-16 bg-slate-800 border border-slate-700 text-white rounded-lg px-2 py-1.5 text-sm text-center focus:outline-none focus:border-emerald-500"
                   />
                 </div>
                 {profileType !== 'individual' && (
                   <div>
                     <div className="text-slate-400 text-xs mb-1">{profileType === 'senior' ? 'Person 2 Age' : "Partner's Age"}</div>
                     <input
-                      type="number" min={18} max={99} value={ages.secondary}
-                      onChange={(e) => setAges(a => ({ ...a, secondary: Math.min(99, Math.max(18, Number(e.target.value))) }))}
-                      className="w-14 bg-slate-800 border border-slate-700 text-white rounded-lg px-2 py-2 text-sm text-center focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                      type="number" min={18} max={99}
+                      value={ageInputs.secondary}
+                      onChange={e => handleAgeChange('secondary', e.target.value)}
+                      onBlur={() => handleAgeBlur('secondary')}
+                      className="w-16 bg-slate-800 border border-slate-700 text-white rounded-lg px-2 py-1.5 text-sm text-center focus:outline-none focus:border-emerald-500"
                     />
                   </div>
                 )}
@@ -747,9 +766,11 @@ export default function Dashboard() {
                   <div>
                     <div className="text-slate-400 text-xs mb-1">Child&apos;s Age</div>
                     <input
-                      type="number" min={1} max={99} value={ages.child}
-                      onChange={(e) => setAges(a => ({ ...a, child: Math.min(99, Math.max(1, Number(e.target.value))) }))}
-                      className="w-14 bg-slate-800 border border-slate-700 text-white rounded-lg px-2 py-2 text-sm text-center focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                      type="number" min={1} max={25}
+                      value={ageInputs.child}
+                      onChange={e => handleAgeChange('child', e.target.value)}
+                      onBlur={() => handleAgeBlur('child', true)}
+                      className="w-16 bg-slate-800 border border-slate-700 text-white rounded-lg px-2 py-1.5 text-sm text-center focus:outline-none focus:border-emerald-500"
                     />
                   </div>
                 )}
