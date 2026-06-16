@@ -396,6 +396,61 @@ const sublimitColor = (status: string) => {
   return { bg: 'bg-rose-900/20', text: 'text-rose-400', icon: '✕' };
 };
 
+// --- TOOLTIP COMPONENTS ---
+const Tooltip = ({ text }: { text: string }) => (
+  <span className="relative inline-flex items-center group ml-1">
+    <HelpCircle className="h-3.5 w-3.5 text-slate-600 group-hover:text-slate-300 cursor-help transition-colors duration-150 shrink-0" />
+    <span className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 rounded-lg px-3 py-2.5 text-xs leading-relaxed bg-slate-700 border border-slate-600 text-slate-200 shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-100 z-50 normal-case font-normal tracking-normal">
+      {text}
+      <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-700" />
+    </span>
+  </span>
+);
+
+const TooltipRight = ({ text }: { text: string }) => (
+  <span className="relative inline-flex items-center group ml-1">
+    <HelpCircle className="h-3.5 w-3.5 text-slate-600 group-hover:text-slate-300 cursor-help transition-colors duration-150 shrink-0" />
+    <span className="pointer-events-none absolute bottom-full left-0 mb-2 w-64 rounded-lg px-3 py-2.5 text-xs leading-relaxed bg-slate-700 border border-slate-600 text-slate-200 shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-100 z-50 normal-case font-normal tracking-normal">
+      {text}
+      <span className="absolute top-full left-4 border-4 border-transparent border-t-slate-700" />
+    </span>
+  </span>
+);
+
+// --- JARGON TOOLTIPS FOR PLAN PROS ---
+const JARGON_TOOLTIPS: Record<string, string> = {
+  "Lock the Clock": "Your premium stays fixed at the age you were when you first bought the policy — it won't increase as you get older, until you make your first claim. After a claim, it resets to your current age.",
+  "Booster+": "If you don't make any claims in a year, your unused sum insured carries forward to the next year — effectively increasing your coverage. For example, if you have ₹10L and don't claim, you might have ₹12L available next year.",
+  "ReAssure Forever": "Once you've made your first claim, your sum insured automatically refills unlimited times for the rest of the policy — even for the same illness. Most plans only restore once per year.",
+  "Consumables covered by default": "Consumables are items like gloves, syringes, masks, and PPE kits used during treatment. Most policies don't cover these — you pay out of pocket. HDFC ERGO's Protect Benefit covers them automatically without an add-on.",
+  "HealthReturns": "If you stay healthy and active (tracked via a fitness app), Aditya Birla refunds up to 100% of your premium as a reward. The more active days you log, the higher your cashback.",
+  "Jumpstart rider": "Normally you wait 3 years before pre-existing conditions like diabetes or hypertension are covered. The Jumpstart rider is an optional add-on that cuts this to just 30 days — for specific listed conditions like diabetes, asthma, hypertension, and obesity.",
+  "100% Super Reload restoration": "If your sum insured runs out during the year (e.g. after a big claim), it is automatically refilled 100% — and this can happen unlimited times in a year, for both related and unrelated illnesses.",
+};
+
+// --- FEATURE TOOLTIPS FOR COMPARISON TABLE ---
+const FEATURE_TOOLTIPS: Record<string, string> = {
+  sum_insured: "The maximum amount the insurer will pay for all your medical expenses in a policy year. Example: ₹10L means once your claims reach ₹10L, you pay the rest yourself. This resets every year at renewal.",
+  waiting_period: "The time you must wait after buying the policy before certain conditions are covered. There are 3 types: Initial wait (30 days — nothing except accidents covered), Specific disease wait (1–2 years for listed conditions like hernia, cataracts), Pre-existing disease wait (1–3 years for conditions you had before buying).",
+  room_rent: "The type of hospital room the policy will pay for. If your policy caps you at a 'single room' and you choose a deluxe room, the insurer proportionally reduces your entire bill — not just the room difference. 'No restriction' means you can choose any room without penalty.",
+  pre_hospitalization: "Medical costs before you're admitted — like doctor consultations, blood tests, and scans that led to your hospitalisation. Covered for a set number of days before admission. 60 days is standard.",
+  post_hospitalization: "Medical costs after you're discharged — like follow-up consultations, medicines, and physiotherapy. Covered for a set number of days. 180 days is the best-in-class standard.",
+  hospital_cash: "A fixed daily cash payout for every day you're hospitalised — separate from your actual medical bills. Useful to cover food, transport, and lost income during a hospital stay.",
+  ambulance: "Covers the cost of an ambulance (road or air) to get you to the hospital. Air ambulance is important for emergencies in remote areas — look for plans that cover it up to the sum insured, not just a fixed small amount.",
+  organ_donor: "If you receive an organ transplant, this covers the donor's surgical expenses — not just your own. The donor's costs can be significant and are often overlooked.",
+  copay: "Co-payment: a fixed % of every claim you must pay yourself. Example: 10% co-pay on a ₹1L claim means you pay ₹10,000. Deductible: a fixed amount you pay before insurance kicks in each year. Both reduce your premium but increase out-of-pocket costs at claim time. 'No co-payment' is always better.",
+  day_care: "Medical procedures that don't need 24-hour hospitalisation — like cataract surgery, chemotherapy, or dialysis. These take a few hours and used to be excluded by older policies. Good plans cover all day care procedures without a fixed list.",
+  domiciliary: "Treatment taken at home when you're too ill to go to hospital, or no hospital beds are available. Requires a doctor's certificate. Covered 'up to sum insured' is the best outcome.",
+  ayush: "Coverage for Ayurveda, Yoga, Unani, Siddha, and Homeopathy treatments at registered hospitals. 'Up to sum insured' means the same limit as regular treatment — not a reduced cap.",
+  maternity: "Covers childbirth expenses — normal delivery and C-section. Usually has a long waiting period (2–4 years) and a fixed limit. None of the core plans in this comparison include maternity in the base plan — it's typically a paid add-on.",
+  newborn: "Covers medical expenses for the newborn from birth — including complications and vaccinations. Only relevant if the plan also covers maternity.",
+  renewal: "Benefits that grow over time as you renew: No Claim Bonus increases your sum insured each claim-free year. Restoration refills your sum insured if exhausted mid-year. Look for plans where the bonus doesn't reduce if you make a claim.",
+  loading: "Loading means the insurer increases your premium at renewal because you made claims the previous year. 'No loading' means your premium won't be increased just because you claimed — only age-based increases apply.",
+  health_checkup: "Free annual health check-up provided by the insurer — usually at a network hospital. Useful for early detection of conditions. Some plans offer it from Year 1; others only after 2–3 claim-free years.",
+  claim_record: "The insurer's historical CSR directly from IRDAI public disclosures (NL-37). Both the latest financial year figure and a 3-year average are shown — the 3-year average is more reliable as it smooths out single-year anomalies.",
+  opd_cover: "Covers doctor visits, medicines, and tests that don't require hospitalisation — like a GP consultation or a blood test. Most plans don't include this in the base policy. It matters because OPD costs make up the majority of most families' annual medical spending.",
+};
+
 export default function Dashboard() {
   // --- STATE ---
   const [activeTab, setActiveTab] = useState("comparison");
@@ -587,13 +642,13 @@ export default function Dashboard() {
       {/* --- UNDERWRITING BASELINE STRIP --- */}
       <section className="bg-emerald-950/20 border-b border-emerald-900/30 px-6 py-3">
         <div className="max-w-7xl mx-auto flex flex-wrap gap-y-2 gap-x-6 text-xs text-emerald-400 justify-center md:justify-start">
-          <span><strong>Waiting Period limit:</strong> Max 36 Months PED Cap</span>
+          <span><strong>Waiting Period limit:</strong> Max 36 Months PED Cap<Tooltip text="A waiting period is a time after buying the policy during which certain illnesses are not covered. PED = Pre-Existing Disease (any condition you had before buying the policy). Most plans make you wait 3 years before covering PEDs. The IRDAI cap means no insurer can make you wait more than 3 years." /></span>
           <span className="text-slate-600">|</span>
-          <span><strong>Cashless Timelines:</strong> 1-Hour Authorization, 3-Hour Discharge</span>
+          <span><strong>Cashless Timelines:</strong> 1-Hour Authorization, 3-Hour Discharge<Tooltip text="Cashless means the insurer pays the hospital directly — you don't need to pay upfront and claim later. Authorization is the insurer's approval before treatment begins. IRDAI now mandates insurers must approve within 1 hour and clear final discharge within 3 hours." /></span>
           <span className="text-slate-600">|</span>
-          <span><strong>Ayush Parity:</strong> Full Sum Insured Covered</span>
+          <span><strong>Ayush Parity:</strong> Full Sum Insured Covered<Tooltip text="AYUSH refers to Ayurveda, Yoga, Unani, Siddha, and Homeopathy treatments. Parity means these alternative treatments are now covered up to the same limit as regular hospital treatment — not a lower sub-limit." /></span>
           <span className="text-slate-600">|</span>
-          <span><strong>Moratorium:</strong> Reduced to 5 Years</span>
+          <span><strong>Moratorium:</strong> Reduced to 5 Years<Tooltip text="The moratorium period is the maximum time after which an insurer can no longer question or reject a claim based on non-disclosure of a pre-existing condition (except in cases of proven fraud). IRDAI reduced this from 8 years to 5 years, giving policyholders faster protection." /></span>
         </div>
       </section>
 
@@ -640,7 +695,7 @@ export default function Dashboard() {
             {/* Sum Insured Selector */}
             <div>
               <label className="block text-xs font-semibold text-slate-400 mb-2 flex items-center gap-1.5">
-                <Shield className="h-3 w-3" /> Desired Sum Insured
+                <Shield className="h-3 w-3" /> Desired Sum Insured<Tooltip text="The maximum your policy will pay in a year. A common mistake is buying too little. For a family in a metro city, ₹10–15L is a reasonable minimum for the base plan. Consider adding a top-up plan for higher coverage at lower cost." />
               </label>
               <div className="grid grid-cols-4 gap-1 bg-slate-900 p-1 rounded-lg border border-slate-800">
                 {["10", "15", "25", "50"].map((si: string) => (
@@ -658,7 +713,7 @@ export default function Dashboard() {
             {/* Pricing Zone/Tier Selector */}
             <div>
               <label className="block text-xs font-semibold text-slate-400 mb-2 flex items-center gap-1.5">
-                <DollarSign className="h-3 w-3" /> Geographical Zone
+                <DollarSign className="h-3 w-3" /> Geographical Zone<Tooltip text="Insurers divide India into zones based on healthcare costs. Zone 1 (metros like Mumbai, Delhi) has the highest premiums because hospital costs are higher. Zone 2 and 3 offer 15–25% lower premiums for smaller cities. Choose the zone where you primarily live and get treatment." />
               </label>
               <select
                 value={selectedZone}
@@ -699,7 +754,7 @@ export default function Dashboard() {
                     <div key={key} className="bg-slate-900 p-3 rounded-lg border border-slate-800/80 hover:border-slate-700 transition">
                       <div className="text-[11px] font-semibold text-slate-400 uppercase mb-1 flex items-center justify-between">
                         {item.title.split(' ')[0]}
-                        <span title={item.desc}><HelpCircle className="h-3 w-3 text-slate-600 hover:text-slate-400 cursor-pointer" /></span>
+                        <Tooltip text={item.desc} />
                       </div>
                       <p className="text-xs text-slate-500 leading-tight mt-1">{item.desc.substring(0, 52)}...</p>
                     </div>
@@ -763,16 +818,16 @@ export default function Dashboard() {
 
                     <div className="px-5 py-4 bg-slate-900/40 border-b border-slate-800/60 grid grid-cols-3 gap-2 text-center text-[10px]">
                       <div>
-                        <div className="text-slate-500 font-semibold">CSR</div>
+                        <div className="text-slate-500 font-semibold flex items-center justify-center">CSR<Tooltip text="Claims Settlement Ratio — the % of claims the insurer paid out of total claims filed last year. Example: 97% means they paid 97 out of every 100 claims. Higher is better. Industry average is ~91%. The 3yr average is more reliable than a single year." /></div>
                         <div className="text-white font-bold text-xs mt-0.5">{plan.csr}</div>
                         <div className="text-slate-600 text-[9px] mt-0.5">3yr: {plan.csr3yr}</div>
                       </div>
                       <div className="border-x border-slate-800/80">
-                        <div className="text-slate-500 font-semibold">ICR</div>
+                        <div className="text-slate-500 font-semibold flex items-center justify-center">ICR<Tooltip text="Incurred Claim Ratio — how much the insurer paid out in claims vs premiums collected. Example: 81% means for every ₹100 collected, ₹81 was paid as claims. 60–80% is the healthy range. Too low may mean they reject too many claims; too high risks the insurer's financial health." /></div>
                         <div className="text-white font-bold text-xs mt-0.5">{plan.icr}</div>
                       </div>
                       <div>
-                        <div className="text-slate-500 font-semibold">Solvency</div>
+                        <div className="text-slate-500 font-semibold flex items-center justify-center">Solvency<Tooltip text="Solvency Ratio — measures how much financial buffer the insurer has to pay claims even in a crisis year. IRDAI requires a minimum of 1.5x. Think of it like: if claims suddenly doubled, could they still pay? Higher is safer." /></div>
                         <div className="text-white font-bold text-xs mt-0.5">{plan.solvency}</div>
                       </div>
                     </div>
@@ -781,16 +836,19 @@ export default function Dashboard() {
                       <div>
                         <h4 className="text-[10px] uppercase font-bold text-emerald-500 tracking-wider mb-1.5">Highlighted Advantages</h4>
                         <ul className="space-y-1">
-                          {plan.pros.map((pro: string, idx: number) => (
-                            <li key={idx} className="text-xs text-slate-300 flex items-start gap-1.5">
-                              <Check className="h-3.5 w-3.5 text-emerald-500 shrink-0 mt-0.5" />
-                              <span>{pro}</span>
-                            </li>
-                          ))}
+                          {plan.pros.map((pro: string, idx: number) => {
+                            const jargonMatch = Object.entries(JARGON_TOOLTIPS).find(([key]) => pro.includes(key));
+                            return (
+                              <li key={idx} className="text-xs text-slate-300 flex items-start gap-1.5">
+                                <Check className="h-3.5 w-3.5 text-emerald-500 shrink-0 mt-0.5" />
+                                <span>{pro}{jargonMatch && <Tooltip text={jargonMatch[1]} />}</span>
+                              </li>
+                            );
+                          })}
                         </ul>
                       </div>
                       <div className="pt-2 border-t border-slate-800/60 flex justify-between items-center">
-                        <span className="text-[10px] text-slate-500">IRDAI Complaint Index: {plan.complaints}/10k claims</span>
+                        <span className="text-[10px] text-slate-500 flex items-center">IRDAI Complaint Index: {plan.complaints}/10k claims<Tooltip text="Number of complaints filed with IRDAI per 10,000 claims. Lower is better. Industry average is ~27. Under 15 is excellent. Over 40 means a significant number of customers had disputes — worth factoring in alongside CSR." /></span>
                         <button
                           onClick={() => setSelectedPlanDetail(plan)}
                           className="text-xs text-slate-400 hover:text-white font-semibold flex items-center gap-1 transition"
@@ -849,14 +907,10 @@ export default function Dashboard() {
                         <tr key={feature.key} className="border-b border-slate-800 hover:bg-slate-900/20 transition-all">
                           {/* Row Header */}
                           <td className="p-4 text-xs font-bold text-slate-300 border-r border-slate-800 align-top">
-                            {feature.key === 'opd_cover' ? (
-                              <span className="flex items-center gap-1.5">
-                                {feature.label}
-                                <span title="OPD (Outpatient Department) covers doctor visits, diagnostics, and medicines that do not require hospitalisation. Most Indian health plans do NOT include OPD in the base plan — you pay these costs out of pocket unless you buy an OPD add-on. TATA AIG MediCare Premier includes OPD in the base plan, but only after a 24-month waiting period.">
-                                  <HelpCircle className="h-3 w-3 text-slate-600 hover:text-slate-400 cursor-pointer shrink-0" />
-                                </span>
-                              </span>
-                            ) : feature.label}
+                            <span className="flex items-center">
+                              {feature.label}
+                              {FEATURE_TOOLTIPS[feature.key] && <TooltipRight text={FEATURE_TOOLTIPS[feature.key]} />}
+                            </span>
                           </td>
                           {/* Plan Values */}
                           {comparedPlanIds.map((planId: string) => {
@@ -903,9 +957,7 @@ export default function Dashboard() {
                   <div className="text-left">
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-bold text-white uppercase tracking-wider">Sub-limits &amp; Surgery Caps</span>
-                      <span title="A sub-limit is a cap on how much the insurer pays for a specific procedure, even if your total sum insured is much higher. For example, a ₹1L robotic surgery sub-limit on a ₹10L policy means you pay the remaining cost out of pocket. Plans with no sub-limits give you the full sum insured for any covered procedure.">
-                        <HelpCircle className="h-3.5 w-3.5 text-slate-600 hover:text-slate-400 cursor-pointer" />
-                      </span>
+                      <Tooltip text="A sub-limit is a cap on how much the insurer pays for a specific procedure, even if your total sum insured is much higher. For example, a ₹1L robotic surgery sub-limit on a ₹10L policy means you pay the remaining cost out of pocket. Plans with no sub-limits give you the full sum insured for any covered procedure." />
                     </div>
                     <p className="text-[11px] text-slate-400 mt-0.5">
                       Hidden policy caps that only appear at claim time — the most overlooked factor in plan selection
