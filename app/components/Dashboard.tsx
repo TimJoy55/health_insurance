@@ -641,7 +641,7 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-slate-900 text-slate-100 font-sans antialiased">
       {/* --- TOP HEADER --- */}
-      <header className="border-b border-slate-800 bg-slate-950 px-6 py-5 sticky top-0 z-40 shadow-md">
+      <header className="border-b border-slate-800 bg-slate-950 px-4 md:px-6 py-5 sticky top-0 z-40 shadow-md">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1">
@@ -658,22 +658,22 @@ export default function Dashboard() {
               Independent comparison of 6 retail health plans. Metrics sourced from IRDAI NL-37, NL-45 &amp; NL-26 (Q4 FY2024-25). Premiums shown are indicative — actual costs depend on age, zone &amp; underwriting.
             </p>
           </div>
-          <div className="flex bg-slate-900 border border-slate-800 p-1 rounded-lg">
+          <div className="flex flex-wrap bg-slate-900 border border-slate-800 p-1 rounded-lg">
             <button
               onClick={() => setActiveTab("comparison")}
-              className={`px-4 py-2 rounded-md text-xs font-semibold transition-all ${activeTab === "comparison" ? "bg-emerald-600 text-white shadow" : "text-slate-400 hover:text-white"}`}
+              className={`px-2 py-2 md:px-4 rounded-md text-xs font-semibold transition-all min-h-[44px] md:min-h-0 ${activeTab === "comparison" ? "bg-emerald-600 text-white shadow" : "text-slate-400 hover:text-white"}`}
             >
               <Layers className="inline-block h-3.5 w-3.5 mr-1.5" /> Compare Matrix
             </button>
             <button
               onClick={() => setActiveTab("calculators")}
-              className={`px-4 py-2 rounded-md text-xs font-semibold transition-all ${activeTab === "calculators" ? "bg-emerald-600 text-white shadow" : "text-slate-400 hover:text-white"}`}
+              className={`px-2 py-2 md:px-4 rounded-md text-xs font-semibold transition-all min-h-[44px] md:min-h-0 ${activeTab === "calculators" ? "bg-emerald-600 text-white shadow" : "text-slate-400 hover:text-white"}`}
             >
               <Sliders className="inline-block h-3.5 w-3.5 mr-1.5" /> Risk Simulators
             </button>
             <button
               onClick={() => setActiveTab("recommendation")}
-              className={`px-4 py-2 rounded-md text-xs font-semibold transition-all ${activeTab === "recommendation" ? "bg-emerald-600 text-white shadow" : "text-slate-400 hover:text-white"}`}
+              className={`px-2 py-2 md:px-4 rounded-md text-xs font-semibold transition-all min-h-[44px] md:min-h-0 ${activeTab === "recommendation" ? "bg-emerald-600 text-white shadow" : "text-slate-400 hover:text-white"}`}
             >
               <Sparkles className="inline-block h-3.5 w-3.5 mr-1.5" /> Portfolio Advisor
             </button>
@@ -682,23 +682,23 @@ export default function Dashboard() {
       </header>
 
       {/* --- UNDERWRITING BASELINE STRIP --- */}
-      <section className="bg-emerald-950/20 border-b border-emerald-900/30 px-6 py-3">
-        <div className="max-w-7xl mx-auto flex flex-wrap gap-y-2 gap-x-6 text-xs text-emerald-400 justify-center md:justify-start">
+      <section className="bg-emerald-950/20 border-b border-emerald-900/30 px-4 md:px-6 py-3">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 gap-x-4 gap-y-2 md:flex md:flex-wrap md:gap-x-6 md:gap-y-2 text-xs text-emerald-400 md:justify-start">
           <span><strong>Waiting Period limit:</strong> Max 36 Months PED Cap<TooltipDown text="A waiting period is a time after buying the policy during which certain illnesses are not covered. PED = Pre-Existing Disease (any condition you had before buying the policy). Most plans make you wait 3 years before covering PEDs. The IRDAI cap means no insurer can make you wait more than 3 years." /></span>
-          <span className="text-slate-600">|</span>
+          <span className="text-slate-600 hidden md:inline">|</span>
           <span><strong>Cashless Timelines:</strong> 1-Hour Authorization, 3-Hour Discharge<TooltipDown text="Cashless means the insurer pays the hospital directly — you don't need to pay upfront and claim later. Authorization is the insurer's approval before treatment begins. IRDAI now mandates insurers must approve within 1 hour and clear final discharge within 3 hours." /></span>
-          <span className="text-slate-600">|</span>
+          <span className="text-slate-600 hidden md:inline">|</span>
           <span><strong>Ayush Parity:</strong> Full Sum Insured Covered<TooltipDown text="AYUSH refers to Ayurveda, Yoga, Unani, Siddha, and Homeopathy treatments. Parity means these alternative treatments are now covered up to the same limit as regular hospital treatment — not a lower sub-limit." /></span>
-          <span className="text-slate-600">|</span>
+          <span className="text-slate-600 hidden md:inline">|</span>
           <span><strong>Moratorium:</strong> Reduced to 5 Years<TooltipDown text="The moratorium period is the maximum time after which an insurer can no longer question or reject a claim based on non-disclosure of a pre-existing condition (except in cases of proven fraud). IRDAI reduced this from 8 years to 5 years, giving policyholders faster protection." /></span>
         </div>
       </section>
 
       {/* --- AMBER DISCLAIMER BANNER --- */}
-      <div className="bg-amber-950/30 border-b border-amber-800/30 px-6 py-3">
+      <div className="bg-amber-950/30 border-b border-amber-800/30 px-4 md:px-6 py-3">
         <div className="max-w-7xl mx-auto flex items-start gap-3">
           <AlertTriangle className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
-          <p className="text-xs text-amber-300/80 leading-relaxed">
+          <p className="text-[10px] md:text-xs text-amber-300/80 leading-relaxed">
             <strong className="text-amber-400">Indicative data only.</strong> Metrics from IRDAI public disclosures (NL-37, NL-45, NL-26), Q4 FY2024-25. Premiums are illustrative — not quotes. Verify with your insurer before purchase. <span className="text-amber-500/70">Last updated: April 2026.</span>
           </p>
         </div>
@@ -715,7 +715,7 @@ export default function Dashboard() {
               Personal Profile &amp; Actuarial Cost Engine
             </h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
 
             {/* Demographic Selector */}
             <div>
@@ -788,7 +788,7 @@ export default function Dashboard() {
                   <button
                     key={si}
                     onClick={() => setSelectedSumInsured(si)}
-                    className={`py-1 px-1.5 rounded text-xs font-bold transition ${selectedSumInsured === si ? "bg-emerald-600 text-white" : "text-slate-400 hover:text-white"}`}
+                    className={`py-2.5 px-1.5 rounded text-xs font-bold transition min-h-[44px] flex items-center justify-center ${selectedSumInsured === si ? "bg-emerald-600 text-white" : "text-slate-400 hover:text-white"}`}
                   >
                     {si}L
                   </button>
@@ -862,7 +862,7 @@ export default function Dashboard() {
                       <button
                         key={p.id}
                         onClick={() => toggleComparison(p.id)}
-                        className={`px-2.5 py-1 rounded text-[10px] font-bold transition flex items-center gap-1 ${isSelected ? "bg-emerald-600 text-white border border-emerald-500" : "bg-slate-900 text-slate-400 border border-slate-800"}`}
+                        className={`px-2.5 py-2 md:py-1 rounded text-[10px] font-bold transition flex items-center gap-1 min-h-[44px] md:min-h-0 ${isSelected ? "bg-emerald-600 text-white border border-emerald-500" : "bg-slate-900 text-slate-400 border border-slate-800"}`}
                       >
                         {isSelected && <Check className="h-2.5 w-2.5" />}
                         {p.name.split(' ').slice(0, 2).join(' ')}
@@ -890,7 +890,7 @@ export default function Dashboard() {
                         </span>
                         <button
                           onClick={() => toggleComparison(plan.id)}
-                          className={`px-3 py-1 rounded text-[10px] font-bold tracking-wide transition ${isCompared ? "bg-emerald-950 text-emerald-300 border border-emerald-700" : "bg-slate-900 text-slate-400 border border-slate-800 hover:text-white"}`}
+                          className={`px-3 py-2 md:py-1 rounded text-[10px] font-bold tracking-wide transition min-h-[44px] md:min-h-0 flex items-center ${isCompared ? "bg-emerald-950 text-emerald-300 border border-emerald-700" : "bg-slate-900 text-slate-400 border border-slate-800 hover:text-white"}`}
                         >
                           {isCompared ? "Selected" : "+ Compare"}
                         </button>
@@ -933,7 +933,7 @@ export default function Dashboard() {
                           })}
                         </ul>
                       </div>
-                      <div className="pt-2 border-t border-slate-800/60 flex justify-between items-center">
+                      <div className="pt-2 border-t border-slate-800/60 flex flex-wrap justify-between items-center gap-y-2">
                         <span className="text-[10px] text-slate-500 flex items-center">IRDAI Complaint Index: {plan.complaints}/10k claims<Tooltip text="Number of complaints filed with IRDAI per 10,000 claims. Lower is better. Industry average is ~27. Under 15 is excellent. Over 40 means a significant number of customers had disputes — worth factoring in alongside CSR." /></span>
                         <button
                           onClick={() => setSelectedPlanDetail(plan)}
@@ -950,9 +950,9 @@ export default function Dashboard() {
 
             {/* DYNAMIC COMPARISON MATRIX GRID */}
             <div className="bg-slate-950 rounded-xl border border-slate-800 overflow-hidden shadow-lg">
-              <div className="px-6 py-4 bg-slate-900/60 border-b border-slate-800 flex justify-between items-center">
+              <div className="px-4 md:px-6 py-4 bg-slate-900/60 border-b border-slate-800 flex justify-between items-center">
                 <div>
-                  <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                  <h3 className="text-xs md:text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
                     <FileText className="h-4 w-4 text-emerald-500" /> Side-by-Side Comparison
                   </h3>
                   <p className="text-[11px] text-slate-400 mt-1">
@@ -964,11 +964,14 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              <div className="overflow-x-auto">
+              <p className="text-[10px] text-slate-500 md:hidden flex items-center gap-1 px-4 pt-3 pb-1">
+                <ChevronRight className="h-3 w-3 shrink-0" /> Scroll sideways to compare all parameters
+              </p>
+              <div className="-mx-4 px-4 md:mx-0 md:px-0 overflow-x-auto">
                 <table className="w-full text-left border-collapse min-w-[900px]">
                   <thead>
                     <tr className="border-b border-slate-800 bg-slate-950">
-                      <th className="p-4 text-xs font-bold uppercase tracking-wider text-slate-400 w-1/5 border-r border-slate-800">
+                      <th className="p-4 text-xs font-bold uppercase tracking-wider text-slate-400 w-1/5 border-r border-slate-800 sticky left-0 bg-slate-950 z-10">
                         Feature / Category
                       </th>
                       {comparedPlanIds.map((planId: string) => {
@@ -992,7 +995,7 @@ export default function Dashboard() {
                       return (
                         <tr key={feature.key} className="border-b border-slate-800 hover:bg-slate-900/20 transition-all">
                           {/* Row Header */}
-                          <td className="p-4 text-xs font-bold text-slate-300 border-r border-slate-800 align-top">
+                          <td className="p-4 text-xs font-bold text-slate-300 border-r border-slate-800 align-top sticky left-0 bg-slate-950 z-10">
                             <span className="flex items-center">
                               {feature.label}
                               {FEATURE_TOOLTIPS[feature.key] && <TooltipRight text={FEATURE_TOOLTIPS[feature.key]} />}
@@ -1058,11 +1061,14 @@ export default function Dashboard() {
 
               {sublimitsExpanded && (
                 <div>
-                  <div className="overflow-x-auto">
+                  <p className="text-[10px] text-slate-500 md:hidden flex items-center gap-1 px-4 pt-3 pb-1">
+                    <ChevronRight className="h-3 w-3 shrink-0" /> Scroll sideways to see all plans
+                  </p>
+                  <div className="-mx-4 px-4 md:mx-0 md:px-0 overflow-x-auto">
                     <table className="w-full text-left border-collapse min-w-[900px]">
                       <thead>
                         <tr className="border-b border-slate-800 bg-slate-950">
-                          <th className="p-4 text-xs font-bold uppercase tracking-wider text-slate-400 w-1/5 border-r border-slate-800">
+                          <th className="p-4 text-xs font-bold uppercase tracking-wider text-slate-400 w-1/5 border-r border-slate-800 sticky left-0 bg-slate-950 z-10">
                             Procedure / Benefit
                           </th>
                           {comparedPlanIds.map((planId: string) => {
@@ -1080,7 +1086,7 @@ export default function Dashboard() {
                       <tbody>
                         {SUBLIMIT_ROWS.map((row) => (
                           <tr key={row.key} className="border-b border-slate-800 hover:bg-slate-900/20 transition-all">
-                            <td className="p-4 text-xs font-bold text-slate-300 border-r border-slate-800 align-top">
+                            <td className="p-4 text-xs font-bold text-slate-300 border-r border-slate-800 align-top sticky left-0 bg-slate-950 z-10">
                               {row.label}
                             </td>
                             {comparedPlanIds.map((planId: string) => {
@@ -1606,7 +1612,7 @@ export default function Dashboard() {
                     </div>
 
                     {/* Right Premium Callout */}
-                    <div className="md:w-1/3 bg-slate-900/50 rounded-lg p-4 border border-slate-850 flex flex-col justify-between items-center text-center">
+                    <div className="w-full md:w-1/3 bg-slate-900/50 rounded-lg p-4 border border-slate-800 flex flex-col justify-between items-center text-center">
                       <div>
                         <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider block mb-1">Calculated Premium</span>
                         <div className="text-2xl font-black text-emerald-400">₹{calculatedPrem.toLocaleString('en-IN')}</div>
@@ -1663,7 +1669,7 @@ export default function Dashboard() {
       {/* --- FLOATING DETAIL MODAL (DRAWER) --- */}
       {selectedPlanDetail && (
         <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-slate-900 border border-slate-800 rounded-xl max-w-2xl w-full max-h-[85vh] overflow-y-auto shadow-2xl">
+          <div className="bg-slate-900 border border-slate-800 rounded-xl max-w-2xl w-[95vw] mx-auto max-h-[85vh] overflow-y-auto shadow-2xl">
             <div className="p-6 border-b border-slate-800 flex justify-between items-center sticky top-0 bg-slate-900 z-10">
               <div>
                 <span className="text-[10px] uppercase font-black tracking-widest text-emerald-400">{selectedPlanDetail.issuer}</span>
@@ -1732,9 +1738,9 @@ export default function Dashboard() {
       )}
 
       {/* --- FOOTER --- */}
-      <footer className="border-t border-slate-800 bg-slate-950 py-10 px-6 mt-16">
+      <footer className="border-t border-slate-800 bg-slate-950 py-10 px-4 md:px-6 mt-16">
         <div className="max-w-7xl mx-auto space-y-4 text-center">
-          <p className="text-xs text-slate-400">
+          <p className="text-[10px] md:text-xs text-slate-400 leading-relaxed">
             <strong className="text-slate-300">Data Sources:</strong> CSR from IRDAI NL-37 &nbsp;|&nbsp; Complaints from IRDAI NL-45 &nbsp;|&nbsp; Solvency from IRDAI NL-26 &nbsp;|&nbsp; All from Q4 FY2024-25 public disclosures. Last updated: April 2026.
           </p>
           <p className="text-xs text-amber-400/70 flex items-center justify-center gap-1.5">
